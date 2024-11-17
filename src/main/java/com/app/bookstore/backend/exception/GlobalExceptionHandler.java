@@ -20,4 +20,10 @@ public class GlobalExceptionHandler
     {
         return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<String> bookNotFound(BookNotFoundException e)
+    {
+        return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+    }
 }
