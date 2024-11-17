@@ -8,10 +8,13 @@ import com.app.bookstore.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService
@@ -94,5 +97,12 @@ public class UserService
         }
         else
             throw new UserNotFoundException("User Not Found 404");
+    }
+
+    public UserResponseDTO resetPassword(Long id, UserRegisterDTO registerDTO)
+    {
+        User existingUser=userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found 404"));
+        existingUser.setPassword(encoder.encode(registerDTO.getPassword()));
+        return userToResponseDTO(userRepository.save(existingUser));
     }
 }

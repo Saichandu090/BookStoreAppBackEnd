@@ -3,6 +3,7 @@ package com.app.bookstore.backend.controller;
 import com.app.bookstore.backend.DTO.UserLoginDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
 import com.app.bookstore.backend.DTO.UserResponseDTO;
+import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.service.JWTService;
 import com.app.bookstore.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController
@@ -58,8 +60,14 @@ public class UserController
         return new ResponseEntity<List<UserResponseDTO>>(userService.findALlUsers(),HttpStatus.FOUND);
     }
 
+    @PatchMapping("/resetPassword/{id}")
+    public ResponseEntity<UserResponseDTO> resetPassword(@PathVariable Long id, @RequestBody UserRegisterDTO registerDTO)
+    {
+        return new ResponseEntity<UserResponseDTO>(userService.resetPassword(id,registerDTO),HttpStatus.ACCEPTED);
+    }
+
     @PutMapping("/updateUser/{email}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable String email,@RequestBody UserRegisterDTO registerDTO)
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable String email,@Valid @RequestBody UserRegisterDTO registerDTO)
     {
         return new ResponseEntity<UserResponseDTO>(userService.updateUser(email,registerDTO),HttpStatus.ACCEPTED);
     }
