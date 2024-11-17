@@ -14,4 +14,5 @@ public class BookResponseDTO
     private String author;
     private String description;
     private Double price;
+    private Integer quantity;
 }

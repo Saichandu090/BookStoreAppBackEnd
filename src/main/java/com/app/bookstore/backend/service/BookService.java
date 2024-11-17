@@ -7,9 +7,12 @@ import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookService
@@ -38,6 +41,7 @@ public class BookService
         responseDTO.setAuthor(book.getAuthor());
         responseDTO.setPrice(book.getPrice());
         responseDTO.setDescription(book.getDescription());
+        responseDTO.setQuantity(book.getQuantity());
         return responseDTO;
     }
 
@@ -84,5 +88,37 @@ public class BookService
         Book book=bookRepository.findById(id).orElseThrow(()->new BookNotFoundException("Book Not Found 404"));
         bookRepository.delete(book);
         return "Book with id "+id+" has been deleted from the Book Store.";
+    }
+
+    public BookResponseDTO updateBookQuantity(Long id,Map<String,Object> fields)
+    {
+        Book book=bookRepository.findById(id).orElseThrow(()->new BookNotFoundException("Book not found 404"));
+
+        fields.forEach((key,value)->{
+            Field field=ReflectionUtils.findField(Book.class,key);
+            if(field==null)
+            {
+                throw new BookNotFoundException("Field "+key+" Not found in Book Class");
+            }
+            field.setAccessible(true);
+            ReflectionUtils.setField(field,book,value);
+        });
+        return bookToResponseDTO(bookRepository.save(book));
+    }
+
+    public BookResponseDTO updateBookPrice(Long id, Map<String,Object> fields)
+    {
+        Book book=bookRepository.findById(id).orElseThrow(()->new BookNotFoundException("Book not found 404"));
+
+        fields.forEach((key,value)->{
+            Field field=ReflectionUtils.findField(Book.class,key);
+            if(field==null)
+            {
+                throw new BookNotFoundException("Field "+key+" Not found in Book Class");
+            }
+            field.setAccessible(true);
+            ReflectionUtils.setField(field,book,value);
+        });
+        return bookToResponseDTO(bookRepository.save(book));
     }
 }

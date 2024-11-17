@@ -3,7 +3,6 @@ package com.app.bookstore.backend.controller;
 import com.app.bookstore.backend.DTO.UserLoginDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
 import com.app.bookstore.backend.DTO.UserResponseDTO;
-import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.service.JWTService;
 import com.app.bookstore.backend.service.UserService;
 import jakarta.validation.Valid;

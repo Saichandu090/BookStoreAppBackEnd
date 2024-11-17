@@ -26,4 +26,10 @@ public class GlobalExceptionHandler
     {
         return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<String> invalidToken(InvalidTokenException e)
+    {
+        return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+    }
 }
