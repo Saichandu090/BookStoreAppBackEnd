@@ -85,7 +85,7 @@ public class BookController
     }
 
     @PatchMapping("/changeBookPrice/{id}")
-    public ResponseEntity<BookResponseDTO> updateBookPrice(@RequestHeader("Authorization") String authHeader, @PathVariable Long id, @RequestBody Map<String,Object> fields)
+    public ResponseEntity<BookResponseDTO> updateBookPrice(@RequestHeader("Authorization")String authHeader, @PathVariable Long id, @RequestBody Map<String,Object> fields)
     {
         String token=null;
         String email=null;

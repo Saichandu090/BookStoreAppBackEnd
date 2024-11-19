@@ -32,4 +32,10 @@ public class GlobalExceptionHandler
     {
         return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(CartNotFoundException.class)
+    public ResponseEntity<String> cartNotFound(CartNotFoundException e)
+    {
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+    }
 }

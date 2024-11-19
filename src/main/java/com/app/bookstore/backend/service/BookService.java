@@ -33,7 +33,7 @@ public class BookService
         return bookToResponseDTO(bookRepository.save(book));
     }
 
-    private BookResponseDTO bookToResponseDTO(Book book)
+    public BookResponseDTO bookToResponseDTO(Book book)
     {
         BookResponseDTO responseDTO=new BookResponseDTO();
         responseDTO.setId(book.getId());
