@@ -14,13 +14,14 @@ import java.util.List;
 public class Book
 {
     @Id
-    private Long id;
-    private String name;
+    private Long bookId;
+    private String bookName;
     private String author;
     private String description;
     private Double price;
     private Integer quantity;
 
-    @ManyToMany(mappedBy = "bookList",fetch = FetchType.LAZY)
-    private List<Cart> carts;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart carts;
 }

@@ -16,22 +16,16 @@ public class Cart
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long cartId;
 
+    @OneToMany(mappedBy = "carts")
     @JsonIgnore
-    @OneToOne(mappedBy = "cart")
+    private List<Book> books;
+
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "Books_Cart",
-    joinColumns = {
-            @JoinColumn(name = "cart_id",referencedColumnName = "id")
-    },
-    inverseJoinColumns = {
-            @JoinColumn(name = "book_id",referencedColumnName = "id")
-    })
-    private List<Book> bookList;
-
-    private Long quantity;
-    private Long totalPrice;
+    private int quantity;
+    private double totalPrice;
 }

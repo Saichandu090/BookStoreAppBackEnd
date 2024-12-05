@@ -1,5 +1,6 @@
 package com.app.bookstore.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,8 @@ import java.time.LocalDate;
 public class User
 {
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
     private String firstName;
     private String lastName;
     private LocalDate dob;
@@ -24,8 +26,4 @@ public class User
     private String password;
     private String email;
     private String role;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id",referencedColumnName = "id")
-    private Cart cart;
 }

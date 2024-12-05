@@ -15,5 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CartRequestDTO
 {
-    private List<Long> bookId;
+    private Long bookId;
+    private Long quantity;
 }

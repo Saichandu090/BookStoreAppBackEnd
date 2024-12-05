@@ -1,4 +1,4 @@
-package com.app.bookstore.backend.service;
+package com.app.bookstore.backend.serviceimpl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

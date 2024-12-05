@@ -1,6 +1,7 @@
 package com.app.bookstore.backend.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +29,17 @@ public class SecurityConfiguration
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private JWTFilter jwtFilter;
+    private CustomCorsConfiguration customCorsConfiguration;
+
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver handlerExceptionResolver;
+
+    @Bean
+    public JWTFilter jwtFilter()
+    {
+        return new JWTFilter(handlerExceptionResolver);
+    }
 
     @Bean
     public AuthenticationProvider authenticationProvider()
@@ -41,11 +54,12 @@ public class SecurityConfiguration
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request->request.requestMatchers("/registerUser","/login").permitAll()
+                .authorizeHttpRequests(request->request.requestMatchers("register","login").permitAll()
                         .anyRequest().authenticated())
+                .cors(custom->custom.configurationSource(customCorsConfiguration))
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
