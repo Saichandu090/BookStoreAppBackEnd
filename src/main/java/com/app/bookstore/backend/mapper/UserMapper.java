@@ -9,32 +9,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
+@Component
 public class UserMapper
 {
     @Autowired
-    private JWTService jwtService;
+    JWTService jwtService;
 
     @Autowired
     ApplicationContext context;
 
-
     //Authorizing User with the Token
-    public UserDetails getUserDetails(String authHeader)
+    public UserDetails validateUserToken(String authHeader)
     {
+        System.out.println(authHeader);
+        String token=null;
         String email=null;
-
         if(authHeader!=null && authHeader.startsWith("Bearer "))
         {
-            String token=authHeader.substring(7);
+            token=authHeader.substring(7);
+            System.out.println(token);
             email=jwtService.extractEmail(token);
+            System.out.println(email);
         }
-        if(email!=null && SecurityContextHolder.getContext().getAuthentication()==null)
-        {
-            return context.getBean(MyUserDetailsService.class).loadUserByUsername(email);
-        }
+        UserDetails userDetails=context.getBean(MyUserDetailsService.class).loadUserByUsername(email);
+        if(jwtService.validateToken(token,userDetails))
+            return userDetails;
         else
             return null;
     }

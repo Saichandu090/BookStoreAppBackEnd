@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface BookService
 {
-    public JsonResponseDTO addBook(String email, BookRequestDTO requestDTO);
+    public JsonResponseDTO addBook(BookRequestDTO requestDTO);
 
     public JsonResponseDTO getBooks(String email);
 
@@ -17,4 +17,5 @@ public interface BookService
     public JsonResponseDTO updateBook(String email,Long bookId,BookRequestDTO requestDTO);
 
     public JsonResponseDTO deleteBook(String email,Long bookId);
+
 }

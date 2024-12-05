@@ -9,6 +9,7 @@ import com.app.bookstore.backend.service.BookService;
 import com.app.bookstore.backend.serviceimpl.BookServiceImpl;
 import com.app.bookstore.backend.serviceimpl.JWTService;
 import com.app.bookstore.backend.serviceimpl.MyUserDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -22,32 +23,25 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/books")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class BookController
 {
     @Autowired
     private BookService bookService;
 
-    @Autowired
-    private JWTService jwtService;
-
     private final BookMapper bookMapper=new BookMapper();
 
-    private final UserMapper userMapper=new UserMapper();
-
     @Autowired
-    ApplicationContext context;
+    private UserMapper userMapper;
 
     @PostMapping("/addBook")
-    public ResponseEntity<?> addBook(@RequestHeader("Authorization") String authHeader,@RequestBody BookRequestDTO bookRequestDTO)
+    public ResponseEntity<?> addBook(@RequestHeader("Authorization") String authHeader,@Valid @RequestBody BookRequestDTO bookRequestDTO)
     {
-        UserDetails userDetails=userMapper.getUserDetails(authHeader);
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
         {
-            return new ResponseEntity<>(bookService.addBook(userDetails.getUsername(),bookRequestDTO), HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(bookService.addBook(bookRequestDTO),HttpStatus.OK);
         }
+        return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
     }
-
 }

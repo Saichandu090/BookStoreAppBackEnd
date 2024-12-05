@@ -47,4 +47,13 @@ public class BookMapper
         responseDTO.setData(List.of(book));
         return responseDTO;
     }
+
+    public JsonResponseDTO bookNotSaved()
+    {
+        JsonResponseDTO responseDTO=new JsonResponseDTO();
+        responseDTO.setResult(false);
+        responseDTO.setMessage("Book not saved!!");
+        responseDTO.setData(null);
+        return responseDTO;
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
@@ -24,17 +23,16 @@ public class JWTService
 
     public JWTService()
     {
-        this.secretKey=generateKey();
+        secretKey=generateSecretKey();
     }
 
-    private String generateKey()
+    public String generateSecretKey()
     {
-        try
-        {
-            KeyGenerator keyGenerator= KeyGenerator.getInstance("HmacSHA256");
-            Key secret=keyGenerator.generateKey();
-            System.out.println("Secret Key : "+secret.toString());
-            return Base64.getEncoder().encodeToString(secret.getEncoded());
+        try {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
+            SecretKey sk=keyGenerator.generateKey();
+            System.out.println("Secret Key : "+sk.toString());
+            return Base64.getEncoder().encodeToString(sk.getEncoded());
         }
         catch(NoSuchAlgorithmException e)
         {
@@ -42,14 +40,14 @@ public class JWTService
         }
     }
 
-    public String generateToken(String email) {
-
-        Map<String, Object> claims = new HashMap<>();
+    public String generateToken(String userName)
+    {
+        Map<String, Object> claims=new HashMap<>();
 
         return Jwts.builder()
                 .claims()
                 .add(claims)
-                .subject(email)
+                .subject(userName)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000*60*30))
                 .and()
@@ -59,7 +57,7 @@ public class JWTService
 
     private SecretKey getKey()
     {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes=Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -68,9 +66,9 @@ public class JWTService
         return extractClaim(token, Claims::getSubject);
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimResolver)
+    private <T> T extractClaim(String token, Function<Claims,T> claimResolver)
     {
-        final Claims claims = extractAllClaims(token);
+        final Claims claims=extractAllClaims(token);
         return claimResolver.apply(claims);
     }
 
@@ -81,13 +79,20 @@ public class JWTService
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-    }
 
+//        Claims claims= Jwts.parser()
+//                .verifyWith(getKey())
+//                .build()
+//                .parseSignedClaims(token)
+//                .getBody();
+//        System.out.println("Extracted claims: " + claims);
+//        return claims;
+    }
 
     public boolean validateToken(String token, UserDetails userDetails)
     {
-        final String email = extractEmail(token);
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String userName=extractEmail(token);
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token)
@@ -97,6 +102,6 @@ public class JWTService
 
     private Date extractExpiration(String token)
     {
-        return extractClaim(token, Claims::getExpiration);
+        return extractClaim(token,Claims::getExpiration);
     }
 }

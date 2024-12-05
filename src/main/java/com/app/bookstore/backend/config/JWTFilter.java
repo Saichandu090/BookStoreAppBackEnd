@@ -19,45 +19,46 @@ import java.io.IOException;
 
 public class JWTFilter extends OncePerRequestFilter
 {
-    @Autowired
-    ApplicationContext context;
-
-    @Autowired
-    private JWTService jwtService;
-
     private HandlerExceptionResolver handlerExceptionResolver;
 
+    @Autowired
     public JWTFilter(HandlerExceptionResolver handlerExceptionResolver)
     {
         this.handlerExceptionResolver=handlerExceptionResolver;
     }
 
+    @Autowired
+    private JWTService jwtService;
+
+    @Autowired
+    ApplicationContext context;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException
-    {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String authHeader = request.getHeader("Authorization");
             String token = null;
-            String email = null;
+            String userName = null;
 
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 token = authHeader.substring(7);
-                email = jwtService.extractEmail(token);
+                userName = jwtService.extractEmail(token);
             }
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(email);
+            if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(userName);
                 if (jwtService.validateToken(token, userDetails)) {
-                    UsernamePasswordAuthenticationToken token1 =
+                    UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    token1.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(token1);
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
             filterChain.doFilter(request, response);
-        }catch (Exception e)
+
+        }catch(Exception ex)
         {
-            handlerExceptionResolver.resolveException(request,response,null,e);
+            handlerExceptionResolver.resolveException(request,response,null,ex);
         }
     }
 }

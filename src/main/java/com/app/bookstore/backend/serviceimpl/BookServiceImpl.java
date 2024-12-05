@@ -31,7 +31,7 @@ public class BookServiceImpl implements BookService
     @Autowired
     private UserRepository userRepository;
 
-    public JsonResponseDTO addBook(String email,BookRequestDTO requestDTO)
+    public JsonResponseDTO addBook(BookRequestDTO requestDTO)
     {
         Book book=bookMapper.addBook(requestDTO);
         Book savedBook=bookRepository.save(book);
@@ -67,6 +67,7 @@ public class BookServiceImpl implements BookService
     {
         return null;
     }
+
 
 
 //    public BookResponseDTO updateBookQuantity(Long id,Map<String,Object> fields)
