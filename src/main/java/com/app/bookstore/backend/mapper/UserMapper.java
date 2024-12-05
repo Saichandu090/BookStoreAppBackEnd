@@ -25,15 +25,12 @@ public class UserMapper
     //Authorizing User with the Token
     public UserDetails validateUserToken(String authHeader)
     {
-        System.out.println(authHeader);
         String token=null;
         String email=null;
         if(authHeader!=null && authHeader.startsWith("Bearer "))
         {
             token=authHeader.substring(7);
-            System.out.println(token);
             email=jwtService.extractEmail(token);
-            System.out.println(email);
         }
         UserDetails userDetails=context.getBean(MyUserDetailsService.class).loadUserByUsername(email);
         if(jwtService.validateToken(token,userDetails))

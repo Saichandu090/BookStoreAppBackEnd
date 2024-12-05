@@ -38,12 +38,42 @@ public class BookMapper
         return book;
     }
 
+    public Book updateBook(Long bookId,BookRequestDTO requestDTO)
+    {
+        Book book=new Book();
+        book.setBookId(bookId);
+        book.setBookName(requestDTO.getName());
+        book.setAuthor(requestDTO.getAuthor());
+        book.setQuantity(requestDTO.getQuantity());
+        book.setPrice(requestDTO.getPrice());
+        book.setDescription(requestDTO.getDescription());
+        return book;
+    }
+
+    public JsonResponseDTO deleteBook(String bookName)
+    {
+        JsonResponseDTO responseDTO=new JsonResponseDTO();
+        responseDTO.setResult(true);
+        responseDTO.setMessage("Book with name '"+bookName+"' has deleted Successfully");
+        responseDTO.setData(null);
+        return responseDTO;
+    }
+
     // Returning message after saving Book in DB
     public JsonResponseDTO bookSaved(Book book)
     {
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
         responseDTO.setMessage("Book Saved SuccessFully");
+        responseDTO.setData(List.of(book));
+        return responseDTO;
+    }
+
+    public JsonResponseDTO bookFound(Book book)
+    {
+        JsonResponseDTO responseDTO=new JsonResponseDTO();
+        responseDTO.setResult(true);
+        responseDTO.setMessage("Book Retrieved SuccessFully");
         responseDTO.setData(List.of(book));
         return responseDTO;
     }
@@ -56,4 +86,14 @@ public class BookMapper
         responseDTO.setData(null);
         return responseDTO;
     }
+
+    public JsonResponseDTO sendBookList(List<Book> books)
+    {
+        JsonResponseDTO responseDTO=new JsonResponseDTO();
+        responseDTO.setResult(true);
+        responseDTO.setMessage("Books retrieved Successfully");
+        responseDTO.setData(books);
+        return responseDTO;
+    }
+
 }

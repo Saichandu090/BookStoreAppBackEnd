@@ -39,33 +39,40 @@ public class BookServiceImpl implements BookService
     }
 
     @Override
-    public JsonResponseDTO getBooks(String email)
+    public JsonResponseDTO getAllBooks()
     {
-        return null;
+        List<Book> bookList=bookRepository.findAll();
+        return bookMapper.sendBookList(bookList);
     }
 
     @Override
-    public JsonResponseDTO findById(String email, Long bookId)
+    public JsonResponseDTO findById(Long bookId)
     {
-        return null;
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book Not Found"));
+        return bookMapper.bookFound(book);
     }
 
     @Override
-    public JsonResponseDTO findByName(String email, String bookName)
+    public JsonResponseDTO findByName(String bookName)
     {
-        return null;
+        Book book=bookRepository.findByBookName(bookName).orElseThrow(()->new BookNotFoundException("Book Not Found"));
+        return bookMapper.bookFound(book);
     }
 
     @Override
-    public JsonResponseDTO updateBook(String email, Long bookId, BookRequestDTO requestDTO)
+    public JsonResponseDTO updateBook(Long bookId, BookRequestDTO requestDTO)
     {
-        return null;
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book Not Found"));
+        Book updatedBook=bookMapper.updateBook(book.getBookId(),requestDTO);
+        return bookMapper.bookSaved(bookRepository.save(updatedBook));
     }
 
     @Override
-    public JsonResponseDTO deleteBook(String email, Long bookId)
+    public JsonResponseDTO deleteBook(Long bookId)
     {
-        return null;
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book Not Found"));
+        bookRepository.delete(book);
+        return bookMapper.deleteBook(book.getBookName());
     }
 
 

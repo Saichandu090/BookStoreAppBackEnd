@@ -44,4 +44,59 @@ public class BookController
         }
         return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
     }
+
+    @GetMapping("/allBooks")
+    public ResponseEntity<?> getAllBooks(@RequestHeader("Authorization") String authHeader)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null)
+        {
+            return new ResponseEntity<>(bookService.getAllBooks(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/byBookId/{id}")
+    public ResponseEntity<?> getBookById(@RequestHeader("Authorization") String authHeader,@PathVariable Long id)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null)
+        {
+            return new ResponseEntity<>(bookService.findById(id),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/byBookName/{bookName}")
+    public ResponseEntity<?> getBookByName(@RequestHeader("Authorization") String authHeader,@PathVariable String bookName)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null)
+        {
+            return new ResponseEntity<>(bookService.findByName(bookName),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.FORBIDDEN);
+    }
+
+    @PutMapping("/updateBook/{bookId}")
+    public ResponseEntity<?> editBook(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@Valid @RequestBody BookRequestDTO bookRequestDTO)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+        {
+            return new ResponseEntity<>(bookService.updateBook(bookId,bookRequestDTO),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
+    }
+
+    @DeleteMapping("/deleteBook/{bookId}")
+    public ResponseEntity<?> deleteBook(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+        {
+            return new ResponseEntity<>(bookService.deleteBook(bookId),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
+    }
 }

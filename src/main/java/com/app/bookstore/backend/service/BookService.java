@@ -8,14 +8,14 @@ public interface BookService
 {
     public JsonResponseDTO addBook(BookRequestDTO requestDTO);
 
-    public JsonResponseDTO getBooks(String email);
+    public JsonResponseDTO getAllBooks();
 
-    public JsonResponseDTO findById(String email,Long bookId);
+    public JsonResponseDTO findById(Long bookId);
 
-    public JsonResponseDTO findByName(String email,String bookName);
+    public JsonResponseDTO findByName(String bookName);
 
-    public JsonResponseDTO updateBook(String email,Long bookId,BookRequestDTO requestDTO);
+    public JsonResponseDTO updateBook(Long bookId,BookRequestDTO requestDTO);
 
-    public JsonResponseDTO deleteBook(String email,Long bookId);
+    public JsonResponseDTO deleteBook(Long bookId);
 
 }
