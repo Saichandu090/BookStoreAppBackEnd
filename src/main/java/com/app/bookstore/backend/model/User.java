@@ -26,4 +26,8 @@ public class User
     private String password;
     private String email;
     private String role;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private Cart cart;
 }
