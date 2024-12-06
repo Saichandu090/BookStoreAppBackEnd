@@ -29,7 +29,7 @@ public class CartController
             return ResponseEntity.ok(cartService.addToCart(userDetails.getUsername(),requestDTO));
         }
         else
-            return new ResponseEntity<>(userMapper.userDetailsFailure(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userMapper.noAuthority(), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/getCart")
@@ -42,7 +42,7 @@ public class CartController
         }
         else
         {
-            return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -56,7 +56,7 @@ public class CartController
         }
         else
         {
-            return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -70,7 +70,7 @@ public class CartController
         }
         else
         {
-            return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
         }
     }
 }

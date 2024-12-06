@@ -25,4 +25,6 @@ public class Book
     @JoinColumn(name = "cart_id")
     @JsonIgnore
     private Cart carts;
+
+    private Integer cartBookQuantity;
 }

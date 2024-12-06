@@ -35,6 +35,7 @@ public class BookMapper
         book.setQuantity(requestDTO.getQuantity());
         book.setPrice(requestDTO.getPrice());
         book.setDescription(requestDTO.getDescription());
+        book.setCartBookQuantity(0);
         return book;
     }
 
@@ -47,6 +48,7 @@ public class BookMapper
         book.setQuantity(requestDTO.getQuantity());
         book.setPrice(requestDTO.getPrice());
         book.setDescription(requestDTO.getDescription());
+        book.setCartBookQuantity(0);
         return book;
     }
 

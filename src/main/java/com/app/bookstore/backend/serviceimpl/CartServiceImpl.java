@@ -42,8 +42,7 @@ public class CartServiceImpl implements CartService
             Cart cart = cartMapper.addToCart(user, book, requestDTO.getQuantity());
             user.setCart(cart);
             book.setCarts(cart);
-            //userRepository.save(user);
-            //bookRepository.save(book);
+            book.setCartBookQuantity(requestDTO.getQuantity());
             return cartMapper.saveCart(cartRepository.save(cart));
         }
         else {
@@ -52,6 +51,7 @@ public class CartServiceImpl implements CartService
             cart.setQuantity(cart.getQuantity()+requestDTO.getQuantity());
             cart.setTotalPrice(cart.getTotalPrice()+book.getPrice()* requestDTO.getQuantity());
             book.setCarts(cart);
+            book.setCartBookQuantity(book.getCartBookQuantity()+requestDTO.getQuantity());
             bookRepository.save(book);
             return cartMapper.saveCart(cartRepository.save(cart));
         }
@@ -83,22 +83,41 @@ public class CartServiceImpl implements CartService
         cart.setBooks(books);
         cart.setQuantity(cart.getQuantity()-1);
         cart.setTotalPrice(cart.getTotalPrice()-book.getPrice());
-        book.setCarts(cart);
+        updateQuantity(book.getBookId(),1);
         bookRepository.save(book);
         return cartMapper.updateCart(cartRepository.save(cart));
+    }
+
+    public void updateQuantity(Long bookId, int quantity)
+    {
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book not found"));
+        int cartBookQuantity=book.getCartBookQuantity();
+        if(cartBookQuantity>=1){
+            book.setCartBookQuantity(cartBookQuantity-quantity);
+            if(book.getCartBookQuantity()==0)
+                book.setCarts(null);
+        }else {
+            throw new BookNotFoundException("Book not found");
+        }
+        bookRepository.save(book);
     }
 
     @Override
     public JsonResponseDTO clearCart(String email)
     {
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
+        List<Book> books=user.getCart().getBooks();
+        for(Book book:books)
+        {
+            book.setCarts(null);
+            book.setCartBookQuantity(0);
+            bookRepository.save(book);
+        }
         Cart cart=user.getCart();
         cart.setBooks(List.of());
         cart.setQuantity(0);
         cart.setTotalPrice(0);
-
-        bookRepository.saveAll(cart.getBooks());
         userRepository.save(user);
-        return cartMapper.updateCart(cartRepository.save(cart));  // Problem here is that books are not updated in new cart
+        return cartMapper.removeCart(cartRepository.save(cart));
     }
 }

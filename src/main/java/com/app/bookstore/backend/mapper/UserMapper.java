@@ -49,6 +49,15 @@ public class UserMapper
         return responseDTO;
     }
 
+    public JsonResponseDTO noAuthority()
+    {
+        JsonResponseDTO responseDTO=new JsonResponseDTO();
+        responseDTO.setResult(false);
+        responseDTO.setMessage("No Authority");
+        responseDTO.setData(null);
+        return responseDTO;
+    }
+
     //If user Already Exists
     public JsonResponseDTO userAlreadyExists()
     {

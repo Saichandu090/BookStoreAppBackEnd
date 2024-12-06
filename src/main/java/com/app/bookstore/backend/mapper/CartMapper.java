@@ -40,6 +40,15 @@ public class CartMapper
         return jsonResponseDTO;
     }
 
+    public JsonResponseDTO removeCart(Cart cart)
+    {
+        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
+        jsonResponseDTO.setMessage("Cart is Empty");
+        jsonResponseDTO.setData(null);
+        jsonResponseDTO.setResult(true);
+        return jsonResponseDTO;
+    }
+
     public JsonResponseDTO returnCart(Cart cart)
     {
         //Converting Cart to CartResponseDTO

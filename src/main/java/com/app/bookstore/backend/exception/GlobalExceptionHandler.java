@@ -33,4 +33,10 @@ public class GlobalExceptionHandler
     {
         return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<?> insufficientFound(InsufficientStockException e)
+    {
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+    }
 }
