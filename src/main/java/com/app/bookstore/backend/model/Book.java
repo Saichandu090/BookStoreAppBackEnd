@@ -1,14 +1,14 @@
 package com.app.bookstore.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import java.util.List;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book
@@ -20,11 +20,12 @@ public class Book
     private String description;
     private Double price;
     private Integer quantity;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    @JsonIgnore
-    private Cart carts;
-
     private Integer cartBookQuantity;
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinTable(name = "cart_book",
+            joinColumns = @JoinColumn(name = "book_id",referencedColumnName = "bookId"),
+            inverseJoinColumns = @JoinColumn(name = "cart_id",referencedColumnName = "cartId"))
+    @JsonManagedReference
+    private List<Cart> carts;
 }

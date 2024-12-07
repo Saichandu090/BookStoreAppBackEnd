@@ -5,9 +5,11 @@ import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.Cart;
 import com.app.bookstore.backend.model.User;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class CartMapper
 {
     //Converting User,Book and quantity to Cart

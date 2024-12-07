@@ -16,5 +16,4 @@ import java.util.List;
 public class CartRequestDTO
 {
     private Long bookId;
-    private int quantity;
 }

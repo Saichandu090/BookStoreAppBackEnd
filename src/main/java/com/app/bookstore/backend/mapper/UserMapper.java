@@ -92,7 +92,6 @@ public class UserMapper
     public User convertFromRegisterDTO(UserRegisterDTO registerDTO)
     {
         User user=new User();
-        user.setUserId(registerDTO.getId());
         user.setEmail(registerDTO.getEmail());
         user.setDob(registerDTO.getDob());
         user.setRegisteredDate(LocalDate.now());

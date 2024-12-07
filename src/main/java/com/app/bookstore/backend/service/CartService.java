@@ -2,10 +2,11 @@ package com.app.bookstore.backend.service;
 
 import com.app.bookstore.backend.DTO.CartRequestDTO;
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.model.Cart;
 
 public interface CartService
 {
-    JsonResponseDTO addToCart(String email, CartRequestDTO requestDTO);
+    Cart addToCart(String email, CartRequestDTO requestDTO);
 
     JsonResponseDTO getUserCart(String email);
 

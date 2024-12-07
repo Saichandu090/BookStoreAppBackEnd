@@ -5,6 +5,7 @@ import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.exception.BookNotFoundException;
 import com.app.bookstore.backend.exception.UserNotFoundException;
 import com.app.bookstore.backend.mapper.CartMapper;
+import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.Cart;
 import com.app.bookstore.backend.model.User;
@@ -12,112 +13,80 @@ import com.app.bookstore.backend.repository.BookRepository;
 import com.app.bookstore.backend.repository.CartRepository;
 import com.app.bookstore.backend.repository.UserRepository;
 import com.app.bookstore.backend.service.CartService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
+@AllArgsConstructor
 public class CartServiceImpl implements CartService
 {
-    @Autowired
-    private  CartRepository cartRepository;
+   private CartRepository cartRepository;
+   private BookRepository bookRepository;
+   private UserRepository userRepository;
 
-    @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    private final CartMapper cartMapper=new CartMapper();
+   private CartMapper cartMapper;
 
     @Override
-    public JsonResponseDTO addToCart(String email, CartRequestDTO requestDTO)
-    {
-        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
-        Book book=bookRepository.findById(requestDTO.getBookId()).orElseThrow(()->new BookNotFoundException("Book not found"));
-        if(user.getCart()==null)
-        {
-            Cart cart = cartMapper.addToCart(user, book, requestDTO.getQuantity());
-            user.setCart(cart);
-            book.setCarts(cart);
-            book.setCartBookQuantity(requestDTO.getQuantity());
-            return cartMapper.saveCart(cartRepository.save(cart));
+    public Cart addToCart(String email, CartRequestDTO requestDTO) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        Book book = bookRepository.findById(requestDTO.getBookId())
+                .orElseThrow(() -> new BookNotFoundException("Book not found"));
+
+        Cart cart = user.getCart();
+        if (cart == null) {
+            // Create a new cart for the user
+            cart = new Cart();
+            cart.setUser(user);
+            cart.setBooks(new ArrayList<>());
+            cart.setQuantity(1);
+            cart.setTotalPrice(book.getPrice());
+            cart.getBooks().add(book); // Add the book to the cart
+        } else {
+            // Add book to the cart if not already present
+            if (!cart.getBooks().contains(book)) {
+                cart.getBooks().add(book);
+            }
+            cart.setQuantity(cart.getQuantity() + 1);
+            cart.setTotalPrice(cart.getTotalPrice() + book.getPrice());
         }
-        else {
-            Cart cart=user.getCart();
-            cart.getBooks().add(book);
-            cart.setQuantity(cart.getQuantity()+requestDTO.getQuantity());
-            cart.setTotalPrice(cart.getTotalPrice()+book.getPrice()* requestDTO.getQuantity());
-            book.setCarts(cart);
-            book.setCartBookQuantity(book.getCartBookQuantity()+requestDTO.getQuantity());
-            bookRepository.save(book);
-            return cartMapper.saveCart(cartRepository.save(cart));
+
+        // Update the relationship on the book side
+        if (book.getCarts() == null) {
+            book.setCarts(new ArrayList<>());
         }
+        if (!book.getCarts().contains(cart)) {
+            book.getCarts().add(cart);
+        }
+
+        // Save both entities
+        bookRepository.save(book); // Save book if necessary
+        return cartRepository.save(cart); // Save cart with updated books
     }
+
 
     @Override
     public JsonResponseDTO getUserCart(String email)
     {
-        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
-        if(user.getCart()!=null)
-        {
-            Cart cart=user.getCart();
-            return cartMapper.returnCart(cart);
-        }
-        else
-        {
+        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not Found"));
+        Cart cart=user.getCart();
+        if(cart==null)
             return cartMapper.cartEmpty();
-        }
+        return cartMapper.returnCart(cart);
     }
 
     @Override
-    public JsonResponseDTO removeFromCart(String email, Long bookId)
-    {
-        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
-        Cart cart=user.getCart();
-        List<Book> books=cart.getBooks();
-        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book not found"));
-        books.remove(book);
-        cart.setBooks(books);
-        cart.setQuantity(cart.getQuantity()-1);
-        cart.setTotalPrice(cart.getTotalPrice()-book.getPrice());
-        updateQuantity(book.getBookId(),1);
-        bookRepository.save(book);
-        return cartMapper.updateCart(cartRepository.save(cart));
-    }
-
-    public void updateQuantity(Long bookId, int quantity)
-    {
-        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book not found"));
-        int cartBookQuantity=book.getCartBookQuantity();
-        if(cartBookQuantity>=1){
-            book.setCartBookQuantity(cartBookQuantity-quantity);
-            if(book.getCartBookQuantity()==0)
-                book.setCarts(null);
-        }else {
-            throw new BookNotFoundException("Book not found");
-        }
-        bookRepository.save(book);
+    public JsonResponseDTO removeFromCart(String email, Long bookId) {
+        return null;
     }
 
     @Override
-    public JsonResponseDTO clearCart(String email)
-    {
-        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
-        List<Book> books=user.getCart().getBooks();
-        for(Book book:books)
-        {
-            book.setCarts(null);
-            book.setCartBookQuantity(0);
-            bookRepository.save(book);
-        }
-        Cart cart=user.getCart();
-        cart.setBooks(List.of());
-        cart.setQuantity(0);
-        cart.setTotalPrice(0);
-        userRepository.save(user);
-        return cartMapper.removeCart(cartRepository.save(cart));
+    public JsonResponseDTO clearCart(String email) {
+        return null;
     }
 }

@@ -1,15 +1,17 @@
 package com.app.bookstore.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cart
@@ -18,10 +20,6 @@ public class Cart
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
 
-    @OneToMany(mappedBy = "carts")
-    @JsonIgnore
-    private List<Book> books;
-
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonIgnore
@@ -29,4 +27,13 @@ public class Cart
 
     private int quantity;
     private double totalPrice;
+
+    @ManyToMany(mappedBy = "carts",fetch = FetchType.EAGER)
+    @JsonBackReference
+    private List<Book> books;
+
+    public void setBook(Book book)
+    {
+        this.books.add(book);
+    }
 }
