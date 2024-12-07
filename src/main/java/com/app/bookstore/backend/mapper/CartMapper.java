@@ -1,5 +1,6 @@
 package com.app.bookstore.backend.mapper;
 
+import com.app.bookstore.backend.DTO.BookResponseDTO;
 import com.app.bookstore.backend.DTO.CartResponseDTO;
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.model.Book;
@@ -8,6 +9,7 @@ import com.app.bookstore.backend.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CartMapper
@@ -53,9 +55,10 @@ public class CartMapper
 
     public JsonResponseDTO returnCart(Cart cart)
     {
+        List<BookResponseDTO> responseDTOS=cart.getBooks().stream().map(book->new BookResponseDTO(book.getBookId(),book.getBookName(),book.getAuthor(),book.getDescription(),book.getPrice(),book.getQuantity(), book.getCartBookQuantity())).toList();
         //Converting Cart to CartResponseDTO
         CartResponseDTO dto=new CartResponseDTO();
-        dto.setBooksList(cart.getBooks());
+        dto.setBooksList(responseDTOS);
         dto.setQuantity(cart.getQuantity());
         dto.setTotalPrice(cart.getTotalPrice());
         dto.setId(cart.getCartId());

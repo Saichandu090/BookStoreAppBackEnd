@@ -31,7 +31,7 @@ public class CartServiceImpl implements CartService
    private CartMapper cartMapper;
 
     @Override
-    public Cart addToCart(String email, CartRequestDTO requestDTO) {
+    public JsonResponseDTO addToCart(String email, CartRequestDTO requestDTO) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -62,11 +62,13 @@ public class CartServiceImpl implements CartService
         }
         if (!book.getCarts().contains(cart)) {
             book.getCarts().add(cart);
+            book.setCartBookQuantity(1);
+        }else {
+            book.setCartBookQuantity(book.getCartBookQuantity()+1);
         }
-
         // Save both entities
         bookRepository.save(book); // Save book if necessary
-        return cartRepository.save(cart); // Save cart with updated books
+        return cartMapper.saveCart(cartRepository.save(cart)); // Save cart with updated books
     }
 
 

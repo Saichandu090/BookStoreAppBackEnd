@@ -14,7 +14,7 @@ import java.util.Set;
 public class CartResponseDTO
 {
     private Long id;
-    private List<Book> booksList;
+    private List<BookResponseDTO> booksList;
     private int quantity;
     private double totalPrice;
 }

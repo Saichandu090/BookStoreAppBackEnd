@@ -15,4 +15,5 @@ public class BookResponseDTO
     private String description;
     private Double price;
     private Integer quantity;
+    private Integer cartBookQuantity;
 }
