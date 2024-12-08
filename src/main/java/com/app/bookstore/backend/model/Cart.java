@@ -32,8 +32,4 @@ public class Cart
     @JsonBackReference
     private List<Book> books;
 
-    public void setBook(Book book)
-    {
-        this.books.add(book);
-    }
 }
