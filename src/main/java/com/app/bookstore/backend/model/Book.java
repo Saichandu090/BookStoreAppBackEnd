@@ -28,4 +28,11 @@ public class Book
             inverseJoinColumns = @JoinColumn(name = "cart_id",referencedColumnName = "cartId"))
     @JsonManagedReference
     private List<Cart> carts;
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(name = "book_orders",
+            joinColumns = @JoinColumn(name = "book_id",referencedColumnName = "bookId"),
+            inverseJoinColumns = @JoinColumn(name = "order_id",referencedColumnName = "orderId"))
+    @JsonManagedReference
+    private List<Order> orders;
 }

@@ -1,7 +1,6 @@
 package com.app.bookstore.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +24,11 @@ public class Order
     private LocalDate orderDate;
     private Double orderPrice;
     private Integer orderQuantity;
-    //private List<Book> books;
+
+    @ManyToMany(mappedBy = "orders",fetch = FetchType.LAZY)
+    @JsonBackReference
+    private List<Book> books;
+
     private Boolean cancelOrder;
 
     @ManyToMany(mappedBy = "orders",fetch = FetchType.EAGER)

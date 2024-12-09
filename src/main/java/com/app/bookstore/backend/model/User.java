@@ -39,4 +39,9 @@ public class User
             inverseJoinColumns = @JoinColumn(name = "order_id",referencedColumnName = "orderId"))
     @JsonManagedReference
     private List<Order> orders;
+
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",referencedColumnName = "userId")
+    private List<Address> addresses;
 }
