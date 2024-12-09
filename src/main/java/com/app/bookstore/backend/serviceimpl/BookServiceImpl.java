@@ -9,6 +9,7 @@ import com.app.bookstore.backend.mapper.BookMapper;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.repository.BookRepository;
+import com.app.bookstore.backend.repository.CartRepository;
 import com.app.bookstore.backend.repository.UserRepository;
 import com.app.bookstore.backend.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class BookServiceImpl implements BookService
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     public JsonResponseDTO addBook(BookRequestDTO requestDTO)
     {
@@ -76,11 +80,29 @@ public class BookServiceImpl implements BookService
     }
 
 
+    @Override
+    public JsonResponseDTO updateBookQuantity(Long bookId,int quantity)
+    {
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book not found 404"));
+        book.setQuantity(quantity);
+//        fields.forEach((key,value)->{
+//            Field field=ReflectionUtils.findField(Book.class,key);
+//            if(field==null)
+//            {
+//                throw new BookNotFoundException("Field "+key+" Not found in Book Class");
+//            }
+//            field.setAccessible(true);
+//            ReflectionUtils.setField(field,book,value);
+//        });
+        Book updatedBook=bookRepository.save(book);
+        return bookMapper.bookUpdated(updatedBook,"Book Quantity updated Successfully!!");
+    }
 
-//    public BookResponseDTO updateBookQuantity(Long id,Map<String,Object> fields)
-//    {
-//        Book book=bookRepository.findById(id).orElseThrow(()->new BookNotFoundException("Book not found 404"));
-//
+    @Override
+    public JsonResponseDTO updateBookPrice(Long id,double bookPrice)
+    {
+        Book book=bookRepository.findById(id).orElseThrow(()->new BookNotFoundException("Book not found 404"));
+        book.setPrice(bookPrice);
 //        fields.forEach((key,value)->{
 //            Field field=ReflectionUtils.findField(Book.class,key);
 //            if(field==null)
@@ -90,22 +112,7 @@ public class BookServiceImpl implements BookService
 //            field.setAccessible(true);
 //            ReflectionUtils.setField(field,book,value);
 //        });
-//        return bookToResponseDTO(bookRepository.save(book));
-//    }
-//
-//    public BookResponseDTO updateBookPrice(Long id, Map<String,Object> fields)
-//    {
-//        Book book=bookRepository.findById(id).orElseThrow(()->new BookNotFoundException("Book not found 404"));
-//
-//        fields.forEach((key,value)->{
-//            Field field=ReflectionUtils.findField(Book.class,key);
-//            if(field==null)
-//            {
-//                throw new BookNotFoundException("Field "+key+" Not found in Book Class");
-//            }
-//            field.setAccessible(true);
-//            ReflectionUtils.setField(field,book,value);
-//        });
-//        return bookToResponseDTO(bookRepository.save(book));
-//    }
+        Book updatedBook=bookRepository.save(book);
+        return bookMapper.bookUpdated(updatedBook,"Book Price Updated Successfully!!");
+    }
 }

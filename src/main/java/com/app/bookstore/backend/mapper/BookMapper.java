@@ -71,6 +71,15 @@ public class BookMapper
         return responseDTO;
     }
 
+    public JsonResponseDTO bookUpdated(Book book,String message)
+    {
+        JsonResponseDTO responseDTO=new JsonResponseDTO();
+        responseDTO.setResult(true);
+        responseDTO.setMessage(message);
+        responseDTO.setData(List.of(book));
+        return responseDTO;
+    }
+
     public JsonResponseDTO bookFound(Book book)
     {
         JsonResponseDTO responseDTO=new JsonResponseDTO();

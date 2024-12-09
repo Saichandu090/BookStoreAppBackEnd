@@ -99,4 +99,26 @@ public class BookController
         }
         return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
     }
+
+    @PatchMapping("/updateBookQuantity/{bookId}")
+    public ResponseEntity<?> updateBookQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@RequestParam int quantity)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+        {
+            return new ResponseEntity<>(bookService.updateBookQuantity(bookId,quantity),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
+    }
+
+    @PatchMapping("/updateBookPrice/{bookId}/{bookPrice}")
+    public ResponseEntity<?> updateBookPrice(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@PathVariable double bookPrice)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+        {
+            return new ResponseEntity<>(bookService.updateBookPrice(bookId,bookPrice),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
+    }
 }

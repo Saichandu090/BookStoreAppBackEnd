@@ -60,7 +60,7 @@ public class CartServiceImpl implements CartService
         }
         if (!book.getCarts().contains(cart)) {
             book.getCarts().add(cart);
-            book.setCartBookQuantity(1);
+            book.setCartBookQuantity(book.getCartBookQuantity()+1);
         }else {
             book.setCartBookQuantity(book.getCartBookQuantity()+1);
         }
@@ -152,5 +152,12 @@ public class CartServiceImpl implements CartService
             cart.setTotalPrice(0);
         }
         return cartMapper.saveCart(cartRepository.save(cart));
+    }
+
+    @Override
+    public JsonResponseDTO getAllCarts()
+    {
+        List<Cart> carts=cartRepository.findAll();
+        return cartMapper.returnCartList(carts);
     }
 }

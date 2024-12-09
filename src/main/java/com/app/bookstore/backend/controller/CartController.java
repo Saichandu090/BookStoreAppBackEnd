@@ -73,4 +73,18 @@ public class CartController
             return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/getAllCarts")
+    public ResponseEntity<?> getAllCarts(@RequestHeader("Authorization")String authHeader)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+        {
+            return ResponseEntity.ok(cartService.getAllCarts());
+        }
+        else
+        {
+            return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }

@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -65,5 +66,13 @@ public class AddressServiceImpl implements AddressService
         addressRepository.deleteById(addressId);
 
         return addressMapper.deleteAddress();
+    }
+
+    @Override
+    public JsonResponseDTO getAllUserAddress(String email)
+    {
+        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
+        List<Address> addresses=user.getAddresses();
+        return addressMapper.sendList(addresses);
     }
 }

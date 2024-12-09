@@ -54,4 +54,16 @@ public class AddressController
         else
             return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/allAddress")
+    public ResponseEntity<?> getAllUserAddress(@RequestHeader("Authorization")String authHeader)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null)
+        {
+            return new ResponseEntity<>(addressService.getAllUserAddress(userDetails.getUsername()), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
+    }
 }

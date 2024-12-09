@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService
     {
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
         Cart cart=user.getCart();
-        if(cart==null)
+        if(cart==null || cart.getQuantity()==0)
             throw new CartNotFoundException("Cart is Empty");
 
         Address address=addressRepository.findById(addressId).orElseThrow(()->new AddressNotFoundException("Address Not Found!!"));
@@ -86,8 +86,8 @@ public class OrderServiceImpl implements OrderService
             List<Book> books=order.getBooks();
             for(Book book:books)
             {
-                book.setQuantity(book.getQuantity()+book.getCartBookQuantity());
-                book.setCartBookQuantity(0);
+                book.setQuantity(book.getQuantity()+1);
+                book.setCartBookQuantity(book.getCartBookQuantity()-1);  // Need to still work on cancel order to update book entity
                 bookRepository.save(book);
             }
         }

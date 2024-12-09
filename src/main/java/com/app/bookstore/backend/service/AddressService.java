@@ -10,4 +10,6 @@ public interface AddressService
     JsonResponseDTO editAddress(String email,Long addressId,Address address);
 
     JsonResponseDTO deleteAddress(String email,Long addressId);
+
+    JsonResponseDTO getAllUserAddress(String email);
 }

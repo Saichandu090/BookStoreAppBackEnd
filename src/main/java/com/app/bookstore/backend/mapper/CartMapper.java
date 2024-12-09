@@ -80,4 +80,13 @@ public class CartMapper
         jsonResponseDTO.setResult(true);
         return jsonResponseDTO;
     }
+
+    public JsonResponseDTO returnCartList(List<Cart> carts)
+    {
+        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
+        jsonResponseDTO.setMessage("Cart retrieved successfully!!");
+        jsonResponseDTO.setData(carts);
+        jsonResponseDTO.setResult(true);
+        return jsonResponseDTO;
+    }
 }

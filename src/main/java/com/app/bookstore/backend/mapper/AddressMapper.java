@@ -44,4 +44,13 @@ public class AddressMapper
         responseDTO.setData(null);
         return responseDTO;
     }
+
+    public JsonResponseDTO sendList(List<Address> addresses)
+    {
+        JsonResponseDTO responseDTO=new JsonResponseDTO();
+        responseDTO.setResult(true);
+        responseDTO.setMessage("Address retrieved Successfully!!");
+        responseDTO.setData(addresses);
+        return responseDTO;
+    }
 }
