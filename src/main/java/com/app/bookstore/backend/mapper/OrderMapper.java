@@ -22,11 +22,11 @@ public class OrderMapper
         return order;
     }
 
-    public JsonResponseDTO saveOrder(Order order)
+    public JsonResponseDTO saveOrder(Order order,String message)
     {
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
-        responseDTO.setMessage("Order Placed Successfully!!");
+        responseDTO.setMessage(message);
         responseDTO.setData(List.of(order));
         return responseDTO;
     }

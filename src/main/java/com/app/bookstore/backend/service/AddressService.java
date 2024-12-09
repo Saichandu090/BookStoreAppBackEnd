@@ -5,7 +5,9 @@ import com.app.bookstore.backend.model.Address;
 
 public interface AddressService
 {
-    JsonResponseDTO addAddress(Address address);
+    JsonResponseDTO addAddress(String email,Address address);
 
-    JsonResponseDTO editAddress(Long addressId,Address address);
+    JsonResponseDTO editAddress(String email,Long addressId,Address address);
+
+    JsonResponseDTO deleteAddress(String email,Long addressId);
 }

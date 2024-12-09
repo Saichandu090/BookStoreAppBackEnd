@@ -5,7 +5,7 @@ import com.app.bookstore.backend.model.Address;
 
 public interface OrderService
 {
-    JsonResponseDTO placeOrder(String email, Address address);
+    JsonResponseDTO placeOrder(String email,Long addressId);
 
     JsonResponseDTO cancelOrder(String email,Long orderId);
 

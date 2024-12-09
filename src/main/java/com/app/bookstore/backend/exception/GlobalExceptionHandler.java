@@ -53,4 +53,10 @@ public class GlobalExceptionHandler
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AddressNotFoundException.class)
+    public ResponseEntity<?> insufficientFound(AddressNotFoundException e)
+    {
+        return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
+    }
 }

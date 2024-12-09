@@ -82,6 +82,8 @@ public class CartServiceImpl implements CartService
         Cart cart=user.getCart();
         if(cart==null)
             return cartMapper.cartEmpty();
+        if(cart.getQuantity()==0)
+            return cartMapper.cartEmpty();
         return cartMapper.returnCart(cart);
     }
 

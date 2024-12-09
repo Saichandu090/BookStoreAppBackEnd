@@ -21,13 +21,13 @@ public class OrderController
     @Autowired
     private UserMapper userMapper;
 
-    @PostMapping("/placeOrder")
-    public ResponseEntity<?> placeOrder(@RequestHeader("Authorization")String authHeader, @RequestBody Address address)
+    @PostMapping("/placeOrder/{addressId}")
+    public ResponseEntity<?> placeOrder(@RequestHeader("Authorization")String authHeader, @PathVariable Long addressId)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
         {
-            return new ResponseEntity<>(orderService.placeOrder(userDetails.getUsername(),address), HttpStatus.OK);
+            return new ResponseEntity<>(orderService.placeOrder(userDetails.getUsername(),addressId), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
