@@ -21,4 +21,6 @@ public class BookRequestDTO
     private Double price;
     @Min(value = 16)
     private Integer quantity;
+
+    private String bookLogo;
 }

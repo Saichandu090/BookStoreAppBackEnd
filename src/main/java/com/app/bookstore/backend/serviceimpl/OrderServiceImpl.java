@@ -1,10 +1,8 @@
 package com.app.bookstore.backend.serviceimpl;
 
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.exception.AddressNotFoundException;
-import com.app.bookstore.backend.exception.CartNotFoundException;
-import com.app.bookstore.backend.exception.OrderNotFoundException;
-import com.app.bookstore.backend.exception.UserNotFoundException;
+import com.app.bookstore.backend.DTO.OrderDTO;
+import com.app.bookstore.backend.exception.*;
 import com.app.bookstore.backend.mapper.OrderMapper;
 import com.app.bookstore.backend.model.*;
 import com.app.bookstore.backend.repository.*;
@@ -13,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,50 +24,39 @@ public class OrderServiceImpl implements OrderService
     private BookRepository bookRepository;
     private OrderRepository orderRepository;
     private AddressRepository addressRepository;
+    private CartRepository cartRepository;
 
     private final OrderMapper orderMapper=new OrderMapper();
 
     @Override
-    public JsonResponseDTO placeOrder(String email,Long addressId)
+    public JsonResponseDTO placeOrder(String email, OrderDTO orderDTO)
     {
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
-        Cart cart=user.getCart();
-        if(cart==null || cart.getQuantity()==0)
-            throw new CartNotFoundException("Cart is Empty");
+        List<Address> userAddressList=user.getAddresses();
+        Address address=addressRepository.findById(orderDTO.getAddressId()).orElseThrow(()->new AddressNotFoundException("Address not associated with User"));
 
-        Address address=addressRepository.findById(addressId).orElseThrow(()->new AddressNotFoundException("Address Not Found!!"));
-        if(!user.getAddresses().contains(address))
-            throw new RuntimeException("Address Should not be Empty");
 
-        List<Book> books=cart.getBooks();
-        Order order=orderMapper.setOrder(books,cart.getTotalPrice());
-        order.setOrderQuantity(cart.getQuantity());
+        if(!userAddressList.contains(address))
+            throw new RuntimeException("Address Required!!");
+        List<Cart> carts=user.getCarts();
 
-        if(order.getUsers()==null)
-            order.setUsers(new ArrayList<>());
-        order.getUsers().add(user);
-        if(user.getOrders()==null)
-            user.setOrders(new ArrayList<>());
-        user.getOrders().add(order);
+        Order order=new Order();
+        order.getCarts().addAll(carts);
+        order.setAddressId(address.getAddressId());
+        order.setUserId(user.getUserId());
+        order.setOrderDate(LocalDate.now());
+        order.setCancelOrder(false);
+        order.setOrderPrice(orderDTO.getPrice());
+        order.setOrderQuantity(orderDTO.getQuantity());
 
-        for(Book book:books)
-        {
-            if(book.getOrders()==null)
-                book.setOrders(new ArrayList<>());
-            book.getOrders().add(order);
-        }
-        if(!order.getCancelOrder()){
-            for(Book book:books)
-            {
-                book.setCarts(null);
-            }
-        }
+        if(address.getOrder()==null)
+            address.setOrder(new ArrayList<>());
+        address.getOrder().add(order);
 
-        cart.setBooks(null);
-        cart.setQuantity(0);
-        cart.setTotalPrice(0.0);
-        Order savedOrder=orderRepository.save(order);
-        return orderMapper.saveOrder(savedOrder,"Order Placed Successfully!!");
+        user.getCarts().removeAll(carts);
+        cartRepository.saveAll(carts);
+
+        return orderMapper.saveOrder(orderRepository.save(order),"Order with Id "+order.getOrderId()+" placed successfully!!!");
     }
 
     @Override
@@ -77,23 +65,20 @@ public class OrderServiceImpl implements OrderService
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
         Order order=orderRepository.findById(orderId).orElseThrow(()->new OrderNotFoundException("Order Not Found"));
 
-        if(order.getCancelOrder())
-            throw new OrderNotFoundException("Order is not active to cancel");
-
-        if(user.getOrders().contains(order))
-        {
-            order.setCancelOrder(true);
-            List<Book> books=order.getBooks();
-            for(Book book:books)
-            {
-                book.setQuantity(book.getQuantity()+1);
-                book.setCartBookQuantity(book.getCartBookQuantity()-1);  // Need to still work on cancel order to update book entity
-                bookRepository.save(book);
-            }
+        if(order.getCancelOrder()){
+            throw new RuntimeException("Order already Cancelled!!");
         }
-        Order cancelledOrder=orderRepository.save(order);
+        List<Cart> carts=order.getCarts();
+        for(Cart cart: carts)
+        {
+            Book book=bookRepository.findById(cart.getBookId()).orElseThrow(()->new BookNotFoundException("Book Not Found"));
+            book.setQuantity(book.getQuantity()+ cart.getQuantity());
+            book.setCartBookQuantity(book.getCartBookQuantity()- cart.getQuantity());
+            cartRepository.save(cart);
+        }
+        order.setCancelOrder(true);
 
-        return orderMapper.saveOrder(cancelledOrder,"Order Cancelled Successfully!!");
+        return orderMapper.saveOrder(orderRepository.save(order),"Order with Id "+order.getOrderId()+" cancelled successfully!!");
     }
 
     @Override
@@ -107,7 +92,7 @@ public class OrderServiceImpl implements OrderService
     public JsonResponseDTO getAllOrdersForUser(String email)
     {
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
-        List<Order> orderList=user.getOrders();
+        List<Order> orderList=orderRepository.findByUserId(user.getUserId());
         return orderMapper.sendOrderList(orderList,"OrderList for User "+email+" retrieved Successfully!!");
     }
 }

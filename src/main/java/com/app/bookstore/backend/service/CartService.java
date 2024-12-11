@@ -7,9 +7,9 @@ public interface CartService
 {
     JsonResponseDTO addToCart(String email, CartRequestDTO requestDTO);
 
-    JsonResponseDTO getUserCart(String email);
+    JsonResponseDTO getUserCarts(String email);
 
-    JsonResponseDTO removeFromCart(String email, Long bookId);
+    JsonResponseDTO removeFromCart(String email, Long cartId);
 
     JsonResponseDTO clearCart(String email);
 

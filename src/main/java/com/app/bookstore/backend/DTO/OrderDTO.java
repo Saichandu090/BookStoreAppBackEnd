@@ -2,6 +2,7 @@ package com.app.bookstore.backend.DTO;
 
 import com.app.bookstore.backend.model.Address;
 import com.app.bookstore.backend.model.Book;
+import com.app.bookstore.backend.model.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,7 @@ import java.util.List;
 @Setter
 public class OrderDTO
 {
-    private Long userId;
-    private List<Book> books;
     private int quantity;
-    private Address address;
+    private double price;
+    private Long addressId;
 }

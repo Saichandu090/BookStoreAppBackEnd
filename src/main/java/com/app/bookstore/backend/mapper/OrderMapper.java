@@ -17,7 +17,7 @@ public class OrderMapper
         Order order=new Order();
         order.setOrderDate(LocalDate.now());
         order.setCancelOrder(false);
-        order.setBooks(new ArrayList<>(books));
+        //order.setBooks(new ArrayList<>(books));
         order.setOrderPrice(totalPrice);
         return order;
     }

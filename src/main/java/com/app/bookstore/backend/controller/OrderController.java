@@ -1,5 +1,6 @@
 package com.app.bookstore.backend.controller;
 
+import com.app.bookstore.backend.DTO.OrderDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Address;
 import com.app.bookstore.backend.service.OrderService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/order")
+@CrossOrigin(allowedHeaders = "*",origins = "*")
 public class OrderController
 {
     @Autowired
@@ -21,19 +23,19 @@ public class OrderController
     @Autowired
     private UserMapper userMapper;
 
-    @PostMapping("/placeOrder/{addressId}")
-    public ResponseEntity<?> placeOrder(@RequestHeader("Authorization")String authHeader, @PathVariable Long addressId)
+    @PostMapping("/placeOrder")
+    public ResponseEntity<?> placeOrder(@RequestHeader("Authorization")String authHeader, @RequestBody OrderDTO orderDTO)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
         {
-            return new ResponseEntity<>(orderService.placeOrder(userDetails.getUsername(),addressId), HttpStatus.OK);
+            return new ResponseEntity<>(orderService.placeOrder(userDetails.getUsername(),orderDTO), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/cancelOrder/{orderId}")
+    @DeleteMapping("/cancelOrder/{orderId}")
     public ResponseEntity<?> cancelOrder(@RequestHeader("Authorization")String authHeader,@PathVariable Long orderId)
     {
         System.out.println(orderId);

@@ -18,8 +18,8 @@ public class CartMapper
     public Cart addToCart(User user, Book book, int quantity)
     {
         Cart cart=new Cart();
-        cart.setBooks(List.of(book));
-        cart.setUser(user);
+        //cart.setBooks(List.of(book));
+        //cart.setUser(user);
         cart.setQuantity(quantity);
         cart.setTotalPrice(cart.getQuantity()*book.getPrice());
         return cart;
@@ -55,10 +55,10 @@ public class CartMapper
 
     public JsonResponseDTO returnCart(Cart cart)
     {
-        List<BookResponseDTO> responseDTOS=cart.getBooks().stream().map(book->new BookResponseDTO(book.getBookId(),book.getBookName(),book.getAuthor(),book.getDescription(),book.getPrice(),book.getQuantity(), book.getCartBookQuantity())).toList();
+        //List<BookResponseDTO> responseDTOS=cart.getBooks().stream().map(book->new BookResponseDTO(book.getBookId(),book.getBookName(),book.getAuthor(),book.getDescription(),book.getPrice(),book.getQuantity(), book.getCartBookQuantity(), book.getBookLogo())).toList();
         //Converting Cart to CartResponseDTO
         CartResponseDTO dto=new CartResponseDTO();
-        dto.setBooksList(responseDTOS);
+        //dto.setBooksList(responseDTOS);
         dto.setQuantity(cart.getQuantity());
         dto.setTotalPrice(cart.getTotalPrice());
         dto.setId(cart.getCartId());
@@ -84,8 +84,17 @@ public class CartMapper
     public JsonResponseDTO returnCartList(List<Cart> carts)
     {
         JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
-        jsonResponseDTO.setMessage("Cart retrieved successfully!!");
+        jsonResponseDTO.setMessage("Carts retrieved successfully!!");
         jsonResponseDTO.setData(carts);
+        jsonResponseDTO.setResult(true);
+        return jsonResponseDTO;
+    }
+
+    public JsonResponseDTO cartRemoved(String message)
+    {
+        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
+        jsonResponseDTO.setMessage(message);
+        jsonResponseDTO.setData(null);
         jsonResponseDTO.setResult(true);
         return jsonResponseDTO;
     }

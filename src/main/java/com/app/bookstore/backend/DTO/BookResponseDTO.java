@@ -16,4 +16,5 @@ public class BookResponseDTO
     private Double price;
     private Integer quantity;
     private Integer cartBookQuantity;
+    private String bookLogo;
 }

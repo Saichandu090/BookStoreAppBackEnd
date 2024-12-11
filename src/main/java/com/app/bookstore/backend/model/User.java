@@ -29,17 +29,15 @@ public class User
     private String email;
     private String role;
 
-    @OneToOne(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",referencedColumnName = "userId")
     @JsonIgnore
-    private Cart cart;
+    private List<Cart> carts;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "user_orders",
-            joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "order_id",referencedColumnName = "orderId"))
-    @JsonManagedReference
-    private List<Order> orders;
-
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",referencedColumnName = "userId")
+    @JsonIgnore
+    private List<Order> order;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",referencedColumnName = "userId")

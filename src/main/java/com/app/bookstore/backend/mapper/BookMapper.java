@@ -30,6 +30,7 @@ public class BookMapper
     {
         Book book=new Book();
         book.setBookId(requestDTO.getId());
+        book.setBookLogo(requestDTO.getBookLogo());
         book.setBookName(requestDTO.getName());
         book.setAuthor(requestDTO.getAuthor());
         book.setQuantity(requestDTO.getQuantity());
@@ -43,6 +44,7 @@ public class BookMapper
     {
         Book book=new Book();
         book.setBookId(bookId);
+        book.setBookLogo(requestDTO.getBookLogo());
         book.setBookName(requestDTO.getName());
         book.setAuthor(requestDTO.getAuthor());
         book.setQuantity(requestDTO.getQuantity());

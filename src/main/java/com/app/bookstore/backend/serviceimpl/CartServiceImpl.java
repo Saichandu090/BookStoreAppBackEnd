@@ -39,93 +39,45 @@ public class CartServiceImpl implements CartService
         Book book = bookRepository.findById(requestDTO.getBookId())
                 .orElseThrow(() -> new BookNotFoundException("Book not found"));
 
-        Cart cart = user.getCart();
-        if (cart == null) {
-            cart = new Cart();
-            cart.setUser(user);
-            cart.setBooks(new ArrayList<>());
-            cart.setQuantity(1);
-            cart.setTotalPrice(book.getPrice());
-            cart.getBooks().add(book);
-        } else {
-            if (!cart.getBooks().contains(book)) {
-                cart.getBooks().add(book);
-            }
-            cart.setQuantity(cart.getQuantity() + 1);
-            cart.setTotalPrice(cart.getTotalPrice() + book.getPrice());
-        }
+        Cart cart=new Cart();
+        cart.setUserId(user.getUserId());
+        cart.setBookId(book.getBookId());
+        cart.setQuantity(requestDTO.getQuantity());
+        cart.setTotalPrice(book.getPrice() * cart.getQuantity());
 
-        if (book.getCarts() == null) {
-            book.setCarts(new ArrayList<>());
-        }
-        if (!book.getCarts().contains(cart)) {
-            book.getCarts().add(cart);
-            book.setCartBookQuantity(book.getCartBookQuantity()+1);
-        }else {
-            book.setCartBookQuantity(book.getCartBookQuantity()+1);
-        }
-
-        if(book.getQuantity()>0) {
-            book.setQuantity(book.getQuantity() - 1);
-        }else {
-            throw new BookNotFoundException("Book Out of Stock");
-        }
+        book.setQuantity(book.getQuantity()- cart.getQuantity());
+        book.setCartBookQuantity(book.getCartBookQuantity()+ cart.getQuantity());
 
         return cartMapper.saveCart(cartRepository.save(cart));
     }
 
 
     @Override
-    public JsonResponseDTO getUserCart(String email)
+    public JsonResponseDTO getUserCarts(String email)
     {
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not Found"));
-        Cart cart=user.getCart();
-        if(cart==null)
-            return cartMapper.cartEmpty();
-        if(cart.getQuantity()==0)
-            return cartMapper.cartEmpty();
-        return cartMapper.returnCart(cart);
+        List<Cart> userCarts=cartRepository.findByUserId(user.getUserId());
+        return cartMapper.returnCartList(userCarts);
     }
 
     @Override
-    public JsonResponseDTO removeFromCart(String email, Long bookId)
+    public JsonResponseDTO removeFromCart(String email, Long cartId)
     {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new BookNotFoundException("Book not found"));
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException("Cart not found"));
 
-        Cart cart=user.getCart();
-        if(cart==null)
-        {
-            throw new CartNotFoundException("Cart is Empty");
-        }
-        else
-        {
-            if(cart.getBooks().contains(book))
-            {
-                if(book.getCartBookQuantity()==0) {
-                    throw new CartNotFoundException("Book is not inside the cart anymore");
-                }
-                cart.getBooks().remove(book);
-                cart.setTotalPrice(cart.getTotalPrice()-book.getPrice());
-                if(cart.getTotalPrice()<0)
-                    cart.setTotalPrice(0.0);
-                cart.setQuantity(cart.getQuantity()-1);
-                book.setCartBookQuantity(book.getCartBookQuantity() - 1);
-                book.setQuantity(book.getQuantity() + 1);
-            }else
-                throw new BookNotFoundException("Book is not present inside the cart");
-        }
+        Book book=bookRepository.findById(cart.getBookId()).orElseThrow(()->new BookNotFoundException("Book Not Found"));
+        book.setQuantity(book.getQuantity()+cart.getQuantity());
+        book.setCartBookQuantity(book.getCartBookQuantity()-cart.getQuantity());
 
-        bookRepository.save(book);
-        if(book.getCartBookQuantity()==0){
-            cart.getBooks().remove(book);
-            book.getCarts().remove(cart);
-        }
-        Cart savedCart=cartRepository.save(cart);
-        return cartMapper.saveCart(savedCart);
+        user.getCarts().remove(cart);
+        cart.setBookId(null);
+        cartRepository.delete(cart);
+
+        return cartMapper.cartRemoved("Book removed from the cart");
     }
 
     @Override
@@ -134,24 +86,20 @@ public class CartServiceImpl implements CartService
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        Cart cart=user.getCart();
-        if(cart==null)
-            throw new CartNotFoundException("Cart is Already Empty");
-        if(cart.getBooks().isEmpty()){
-            return cartMapper.cartEmpty();
-        }else{
-            List<Book> books=cart.getBooks();
-            for(Book book: books)
-            {
-                book.setQuantity(book.getQuantity()+book.getCartBookQuantity());
-                book.setCartBookQuantity(0);
-                book.getCarts().remove(cart);
-            }
-            cart.setBooks(null);
-            cart.setQuantity(0);
-            cart.setTotalPrice(0);
+        List<Cart> carts=cartRepository.findByUserId(user.getUserId());
+
+        user.getCarts().removeAll(carts);
+        userRepository.save(user);
+
+        for(Cart cart:carts)
+        {
+            Book book=bookRepository.findById(cart.getBookId()).orElseThrow(()->new BookNotFoundException("Book not found"));
+            book.setQuantity(book.getQuantity()+ cart.getQuantity());
+            book.setCartBookQuantity(book.getCartBookQuantity()- cart.getQuantity());
+            bookRepository.save(book);
+            cartRepository.delete(cart);
         }
-        return cartMapper.saveCart(cartRepository.save(cart));
+        return cartMapper.cartRemoved("Cart cleared Successfully");
     }
 
     @Override

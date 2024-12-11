@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserMapper
@@ -79,12 +81,12 @@ public class UserMapper
     }
 
     //
-    public JsonResponseDTO loginSuccess(String token)
+    public JsonResponseDTO loginSuccess(String token,String email)
     {
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
         responseDTO.setMessage(token);
-        responseDTO.setData(null);
+        responseDTO.setData(List.of(email));
         return responseDTO;
     }
 

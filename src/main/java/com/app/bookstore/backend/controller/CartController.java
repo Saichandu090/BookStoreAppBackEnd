@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cart")
+@CrossOrigin(allowedHeaders = "*",origins = "*")
 public class CartController
 {
     @Autowired
@@ -38,7 +39,7 @@ public class CartController
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
         {
-            return ResponseEntity.ok(cartService.getUserCart(userDetails.getUsername()));
+            return ResponseEntity.ok(cartService.getUserCarts(userDetails.getUsername()));
         }
         else
         {
@@ -46,13 +47,13 @@ public class CartController
         }
     }
 
-    @DeleteMapping("/removeFromCart/{bookId}")
-    public ResponseEntity<?> removeFromCart(@RequestHeader("Authorization")String authHeader,@PathVariable Long bookId)
+    @DeleteMapping("/removeFromCart/{cartId}")
+    public ResponseEntity<?> removeFromCart(@RequestHeader("Authorization")String authHeader,@PathVariable Long cartId)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
         {
-            return ResponseEntity.ok(cartService.removeFromCart(userDetails.getUsername(),bookId));
+            return ResponseEntity.ok(cartService.removeFromCart(userDetails.getUsername(),cartId));
         }
         else
         {

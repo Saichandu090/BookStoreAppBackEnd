@@ -79,14 +79,6 @@ public class JWTService
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-
-//        Claims claims= Jwts.parser()
-//                .verifyWith(getKey())
-//                .build()
-//                .parseSignedClaims(token)
-//                .getBody();
-//        System.out.println("Extracted claims: " + claims);
-//        return claims;
     }
 
     public boolean validateToken(String token, UserDetails userDetails)

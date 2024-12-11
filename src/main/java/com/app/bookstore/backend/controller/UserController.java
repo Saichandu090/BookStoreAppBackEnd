@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@CrossOrigin(allowedHeaders = "*",origins = "*")
 public class UserController
 {
     @Autowired

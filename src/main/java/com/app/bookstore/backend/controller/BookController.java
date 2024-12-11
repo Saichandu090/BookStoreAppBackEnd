@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/books")
-//@CrossOrigin("*")
+@CrossOrigin(allowedHeaders = "*",origins = "*")
 public class BookController
 {
     @Autowired
