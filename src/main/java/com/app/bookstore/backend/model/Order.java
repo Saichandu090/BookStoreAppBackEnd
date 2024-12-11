@@ -32,10 +32,9 @@ public class Order
 
     private Boolean cancelOrder;
 
-    @JoinColumn(name = "address_id")
+    @Column(name = "address_id")
     private Long addressId;
 
     @Column(name = "user_id")
-    @JsonIgnore
     private Long userId;
 }
