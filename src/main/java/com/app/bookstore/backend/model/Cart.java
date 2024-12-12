@@ -26,6 +26,7 @@ public class Cart
     private int quantity;
     private double totalPrice;
 
-    @Column(name = "book_id")
-    private Long bookId;
+    @OneToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 }

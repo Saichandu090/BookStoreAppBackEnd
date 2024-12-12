@@ -29,7 +29,6 @@ public class BookMapper
     public Book addBook(BookRequestDTO requestDTO)
     {
         Book book=new Book();
-        book.setBookId(requestDTO.getId());
         book.setBookLogo(requestDTO.getBookLogo());
         book.setBookName(requestDTO.getName());
         book.setAuthor(requestDTO.getAuthor());

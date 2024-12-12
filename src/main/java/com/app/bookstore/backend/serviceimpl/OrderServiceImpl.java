@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService
         List<Cart> carts=order.getCarts();
         for(Cart cart: carts)
         {
-            Book book=bookRepository.findById(cart.getBookId()).orElseThrow(()->new BookNotFoundException("Book Not Found"));
+            Book book=bookRepository.findById(cart.getBook().getBookId()).orElseThrow(()->new BookNotFoundException("Book Not Found"));
             book.setQuantity(book.getQuantity()+ cart.getQuantity());
             book.setCartBookQuantity(book.getCartBookQuantity()- cart.getQuantity());
             cartRepository.save(cart);

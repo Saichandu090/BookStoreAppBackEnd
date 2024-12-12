@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookRequestDTO
 {
-    private Long id;
     @NotNull
     private String name;
     @NotNull

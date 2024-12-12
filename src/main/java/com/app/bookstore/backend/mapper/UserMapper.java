@@ -1,6 +1,7 @@
 package com.app.bookstore.backend.mapper;
 
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.DTO.LoginResponseDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.serviceimpl.JWTService;
@@ -81,12 +82,15 @@ public class UserMapper
     }
 
     //
-    public JsonResponseDTO loginSuccess(String token,String email)
+    public JsonResponseDTO loginSuccess(String token,String email,String role)
     {
+        List<LoginResponseDTO> list=new ArrayList<>();
+        list.add(new LoginResponseDTO(email,role));
+
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
         responseDTO.setMessage(token);
-        responseDTO.setData(List.of(email));
+        responseDTO.setData(list);
         return responseDTO;
     }
 

@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService
 
     @Autowired
     private JWTService jwtService;
+
+    @Autowired
+    ApplicationContext context;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -57,7 +61,13 @@ public class UserServiceImpl implements UserService
             if(authentication.isAuthenticated())
             {
                 String token=jwtService.generateToken(loginDTO.getEmail());
-                return userMapper.loginSuccess(token,loginDTO.getEmail());
+                UserDetails userDetails=context.getBean(MyUserDetailsService.class).loadUserByUsername(loginDTO.getEmail());
+                String role=null;
+                if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
+                    role="USER";
+                else if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+                    role="ADMIN";
+                return userMapper.loginSuccess(token,loginDTO.getEmail(),role);
             }
         }
         return userMapper.userNotExists();

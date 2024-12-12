@@ -8,6 +8,7 @@ import com.app.bookstore.backend.model.Cart;
 import com.app.bookstore.backend.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,18 +56,24 @@ public class CartMapper
 
     public JsonResponseDTO returnCart(Cart cart)
     {
-        //List<BookResponseDTO> responseDTOS=cart.getBooks().stream().map(book->new BookResponseDTO(book.getBookId(),book.getBookName(),book.getAuthor(),book.getDescription(),book.getPrice(),book.getQuantity(), book.getCartBookQuantity(), book.getBookLogo())).toList();
+
         //Converting Cart to CartResponseDTO
         CartResponseDTO dto=new CartResponseDTO();
-        //dto.setBooksList(responseDTOS);
+        dto.setUserId(cart.getUserId());
+        dto.setCartId(cart.getCartId());
+        dto.setBookId(cart.getBook().getBookId());
+        dto.setBookLogo(cart.getBook().getBookLogo());
         dto.setQuantity(cart.getQuantity());
         dto.setTotalPrice(cart.getTotalPrice());
-        dto.setId(cart.getCartId());
+        dto.setBookName(cart.getBook().getBookName());
+
+        List<CartResponseDTO> list=new ArrayList<>();
+        list.add(dto);
 
         //Converting CartResponseDTO to JsonResponseDTO
         JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
         jsonResponseDTO.setMessage("Cart returned");
-        jsonResponseDTO.setData(List.of(dto));
+        jsonResponseDTO.setData(list);
         jsonResponseDTO.setResult(true);
         return jsonResponseDTO;
     }
@@ -83,9 +90,10 @@ public class CartMapper
 
     public JsonResponseDTO returnCartList(List<Cart> carts)
     {
+       List<CartResponseDTO> responseDTOS=carts.stream().map(cart -> new CartResponseDTO(cart.getCartId(),cart.getUserId(),cart.getBook().getBookId(),cart.getBook().getBookName(),cart.getBook().getBookLogo(),cart.getQuantity(), cart.getTotalPrice())).toList();
         JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
         jsonResponseDTO.setMessage("Carts retrieved successfully!!");
-        jsonResponseDTO.setData(carts);
+        jsonResponseDTO.setData(responseDTOS);
         jsonResponseDTO.setResult(true);
         return jsonResponseDTO;
     }

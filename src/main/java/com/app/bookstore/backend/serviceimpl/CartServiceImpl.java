@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,7 +40,7 @@ public class CartServiceImpl implements CartService
 
         Cart cart=new Cart();
         cart.setUserId(user.getUserId());
-        cart.setBookId(book.getBookId());
+        cart.setBook(book);
         cart.setQuantity(requestDTO.getQuantity());
         cart.setTotalPrice(book.getPrice() * cart.getQuantity());
 
@@ -69,12 +68,12 @@ public class CartServiceImpl implements CartService
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException("Cart not found"));
 
-        Book book=bookRepository.findById(cart.getBookId()).orElseThrow(()->new BookNotFoundException("Book Not Found"));
+        Book book=bookRepository.findById(cart.getBook().getBookId()).orElseThrow(()->new BookNotFoundException("Book Not Found"));
         book.setQuantity(book.getQuantity()+cart.getQuantity());
         book.setCartBookQuantity(book.getCartBookQuantity()-cart.getQuantity());
 
         user.getCarts().remove(cart);
-        cart.setBookId(null);
+        cart.setBook(null);
         cartRepository.delete(cart);
 
         return cartMapper.cartRemoved("Book removed from the cart");
@@ -93,7 +92,7 @@ public class CartServiceImpl implements CartService
 
         for(Cart cart:carts)
         {
-            Book book=bookRepository.findById(cart.getBookId()).orElseThrow(()->new BookNotFoundException("Book not found"));
+            Book book=bookRepository.findById(cart.getBook().getBookId()).orElseThrow(()->new BookNotFoundException("Book not found"));
             book.setQuantity(book.getQuantity()+ cart.getQuantity());
             book.setCartBookQuantity(book.getCartBookQuantity()- cart.getQuantity());
             bookRepository.save(book);
