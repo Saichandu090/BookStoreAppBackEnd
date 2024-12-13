@@ -14,4 +14,6 @@ public interface CartService
     JsonResponseDTO clearCart(String email);
 
     JsonResponseDTO getAllCarts();
+
+    JsonResponseDTO getUserCartById(String email,Long cartId);
 }

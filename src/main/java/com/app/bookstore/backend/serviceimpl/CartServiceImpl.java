@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,6 +38,18 @@ public class CartServiceImpl implements CartService
 
         Book book = bookRepository.findById(requestDTO.getBookId())
                 .orElseThrow(() -> new BookNotFoundException("Book not found"));
+
+        if(user.getCarts()==null)
+            user.setCarts(new ArrayList<>());
+        List<Cart> carts=user.getCarts();
+        for(Cart cart: carts)
+        {
+                if(cart.getBook().equals(book)) {
+                    book.setQuantity(book.getQuantity()- 1);
+                    book.setCartBookQuantity(book.getCartBookQuantity()+ 1);
+                    return cartMapper.updateCartQuantity(cart);
+                }
+        }
 
         Cart cart=new Cart();
         cart.setUserId(user.getUserId());
@@ -106,5 +119,15 @@ public class CartServiceImpl implements CartService
     {
         List<Cart> carts=cartRepository.findAll();
         return cartMapper.returnCartList(carts);
+    }
+
+    @Override
+    public JsonResponseDTO getUserCartById(String email, Long cartId)
+    {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        Cart cart=cartRepository.findById(cartId).orElseThrow(()->new CartNotFoundException("Cart Not Found"));
+        return cartMapper.returnCart(cart);
     }
 }

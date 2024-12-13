@@ -1,6 +1,5 @@
 package com.app.bookstore.backend.mapper;
 
-import com.app.bookstore.backend.DTO.BookResponseDTO;
 import com.app.bookstore.backend.DTO.CartResponseDTO;
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.model.Book;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class CartMapper
@@ -24,6 +22,13 @@ public class CartMapper
         cart.setQuantity(quantity);
         cart.setTotalPrice(cart.getQuantity()*book.getPrice());
         return cart;
+    }
+
+    public JsonResponseDTO updateCartQuantity(Cart cart)
+    {
+        cart.setQuantity(cart.getQuantity()+1);
+        cart.setTotalPrice(cart.getTotalPrice()+cart.getBook().getPrice());
+        return saveCart(cart);
     }
 
     //Converting Cart to JsonResponseDTO

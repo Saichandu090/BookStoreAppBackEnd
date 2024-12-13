@@ -47,6 +47,20 @@ public class CartController
         }
     }
 
+    @GetMapping("/getCartById/{id}")
+    public ResponseEntity<?> getUserCartById(@RequestHeader("Authorization")String authHeader,@PathVariable Long id)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
+        {
+            return ResponseEntity.ok(cartService.getUserCartById(userDetails.getUsername(),id));
+        }
+        else
+        {
+            return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping("/removeFromCart/{cartId}")
     public ResponseEntity<?> removeFromCart(@RequestHeader("Authorization")String authHeader,@PathVariable Long cartId)
     {

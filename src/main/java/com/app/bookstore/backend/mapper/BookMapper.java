@@ -83,10 +83,12 @@ public class BookMapper
 
     public JsonResponseDTO bookFound(Book book)
     {
+        BookResponseDTO dto=convertBook(book);
+
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
         responseDTO.setMessage("Book Retrieved SuccessFully");
-        responseDTO.setData(List.of(book));
+        responseDTO.setData(List.of(dto));
         return responseDTO;
     }
 
@@ -97,6 +99,19 @@ public class BookMapper
         responseDTO.setMessage("Book not saved!!");
         responseDTO.setData(null);
         return responseDTO;
+    }
+
+    public BookResponseDTO convertBook(Book book)
+    {
+        BookResponseDTO bookResponseDTO=new BookResponseDTO();
+        bookResponseDTO.setId(book.getBookId());
+        bookResponseDTO.setName(book.getBookName());
+        bookResponseDTO.setAuthor(book.getAuthor());
+        bookResponseDTO.setDescription(book.getDescription());
+        bookResponseDTO.setPrice(book.getPrice());
+        bookResponseDTO.setQuantity(book.getQuantity());
+        bookResponseDTO.setBookLogo(book.getBookLogo());
+        return bookResponseDTO;
     }
 
     public JsonResponseDTO sendBookList(List<Book> books)
