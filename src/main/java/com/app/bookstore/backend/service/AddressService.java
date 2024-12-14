@@ -12,4 +12,6 @@ public interface AddressService
     JsonResponseDTO deleteAddress(String email,Long addressId);
 
     JsonResponseDTO getAllUserAddress(String email);
+
+    JsonResponseDTO getAddressById(String email,Long addressId);
 }

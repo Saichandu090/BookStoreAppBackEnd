@@ -67,4 +67,16 @@ public class AddressController
         else
             return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/getAddressById/{addressId}")
+    public ResponseEntity<?> getUserAddressById(@RequestHeader("Authorization")String authHeader,@PathVariable Long addressId)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null)
+        {
+            return new ResponseEntity<>(addressService.getAddressById(userDetails.getUsername(),addressId), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
+    }
 }

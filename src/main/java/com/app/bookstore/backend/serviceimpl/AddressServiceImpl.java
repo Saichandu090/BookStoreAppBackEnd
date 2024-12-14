@@ -75,4 +75,16 @@ public class AddressServiceImpl implements AddressService
         List<Address> addresses=user.getAddresses();
         return addressMapper.sendList(addresses);
     }
+
+    @Override
+    public JsonResponseDTO getAddressById(String email, Long addressId)
+    {
+        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
+
+        Address address=addressRepository.findById(addressId).orElseThrow(()->new AddressNotFoundException("Address Not Found"));
+
+        if(user.getAddresses().contains(address))
+            return addressMapper.saveAddress(address);
+        return addressMapper.addressNotFound("Address not Found");
+    }
 }

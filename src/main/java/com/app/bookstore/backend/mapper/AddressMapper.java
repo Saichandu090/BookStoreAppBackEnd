@@ -53,4 +53,14 @@ public class AddressMapper
         responseDTO.setData(addresses);
         return responseDTO;
     }
+
+
+    public JsonResponseDTO addressNotFound(String message)
+    {
+        JsonResponseDTO responseDTO = new JsonResponseDTO();
+        responseDTO.setResult(false);
+        responseDTO.setMessage(message);
+        responseDTO.setData(null);
+        return responseDTO;
+    }
 }
