@@ -44,7 +44,8 @@ public class CartServiceImpl implements CartService
         List<Cart> carts=user.getCarts();
         for(Cart cart: carts)
         {
-                if(cart.getBook().equals(book)) {
+                if(cart.getBook().equals(book))
+                {
                     book.setQuantity(book.getQuantity()- 1);
                     book.setCartBookQuantity(book.getCartBookQuantity()+ 1);
                     return cartMapper.updateCartQuantity(cart);

@@ -53,7 +53,8 @@ public class OrderServiceImpl implements OrderService
             address.setOrder(new ArrayList<>());
         address.getOrder().add(order);
 
-        user.getCarts().removeAll(carts);
+        user.getCarts().clear();
+        //userRepository.save(user); If user is also saved then it's saving twice so don't do that
         cartRepository.saveAll(carts);
 
         return orderMapper.saveOrder(orderRepository.save(order),"Order with Id "+order.getOrderId()+" placed successfully!!!");
@@ -74,6 +75,7 @@ public class OrderServiceImpl implements OrderService
             Book book=bookRepository.findById(cart.getBook().getBookId()).orElseThrow(()->new BookNotFoundException("Book Not Found"));
             book.setQuantity(book.getQuantity()+ cart.getQuantity());
             book.setCartBookQuantity(book.getCartBookQuantity()- cart.getQuantity());
+            //order.getCarts().remove(cart);
             cartRepository.save(cart);
         }
         order.setCancelOrder(true);
