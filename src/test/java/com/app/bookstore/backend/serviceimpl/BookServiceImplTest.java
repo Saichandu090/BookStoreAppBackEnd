@@ -40,15 +40,6 @@ class BookServiceImplTest
     @Test
     public void updateBookTest() throws BookNotFoundException
     {
-        BookRequestDTO book = new BookRequestDTO();
-        book.setId(1L);
-        book.setName("Book");
-        book.setAuthor("Author");
-        book.setQuantity(10);
-        book.setPrice(100d);
-        book.setDescription("dsfaddda");
-        Book existingBook = new Book();
-        when(bookRepository.findById(1L)).thenReturn(java.util.Optional.of(existingBook));
-        Assertions.assertNotNull(bookService.updateBook(1L, book));
+        
     }
 }

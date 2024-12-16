@@ -1,6 +1,7 @@
 package com.app.bookstore.backend.serviceimpl;
 
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.DTO.WishListDTO;
 import com.app.bookstore.backend.exception.BookNotFoundException;
 import com.app.bookstore.backend.exception.UserNotFoundException;
 import com.app.bookstore.backend.mapper.WishListMapper;
@@ -28,9 +29,9 @@ public class WishListServiceImpl implements WishListService
     private final WishListMapper wishListMapper=new WishListMapper();
 
     @Override
-    public JsonResponseDTO addToWishList(String email, Long bookId)
+    public JsonResponseDTO addToWishList(String email, WishListDTO wishListDTO)
     {
-        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book not found"));
+        Book book=bookRepository.findById(wishListDTO.getBookId()).orElseThrow(()->new BookNotFoundException("Book not found"));
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
 
         List<WishList> wishList=user.getWishList();
@@ -40,17 +41,20 @@ public class WishListServiceImpl implements WishListService
         wishList1.setBook(book);
         wishList1.setUserId(user.getUserId());
 
-        return wishListMapper.returnList(wishListRepository.save(wishList1));
+        user.getWishList().add(wishList1);
+
+        return wishListMapper.returnList(wishListRepository.save(wishList1),book.getBookName());
     }
 
     @Override
-    public JsonResponseDTO removeFromWishList(String email, Long wishListId)
+    public JsonResponseDTO removeFromWishList(String email, Long bookId)
     {
-        WishList wishList=wishListRepository.findById(wishListId).orElseThrow(()->new RuntimeException("WishList not Found"));
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book not Found"));
+        List<WishList> wishLists=user.getWishList();
+        wishLists.removeIf(w -> w.getBook().equals(book));
 
-        user.getWishList().remove(wishList);
-        wishListRepository.delete(wishList);
+        wishListRepository.saveAll(wishLists);
         return wishListMapper.wishListRemoved();
     }
 
@@ -60,6 +64,30 @@ public class WishListServiceImpl implements WishListService
         User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
         List<WishList> wishLists=user.getWishList();
 
-        return wishListMapper.returnWishList(wishLists);
+        List<Book> books=new ArrayList<>();
+
+        for(WishList w: wishLists)
+        {
+            books.add(w.getBook());
+        }
+
+        return wishListMapper.returnWishList(books);
+    }
+
+    @Override
+    public JsonResponseDTO isInWishList(String email, Long bookId)
+    {
+        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found"));
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book not found"));
+        List<WishList> wishLists=user.getWishList();
+
+        for(WishList w:wishLists)
+        {
+            if(w.getBook().equals(book))
+            {
+                return wishListMapper.inWishList();
+            }
+        }
+        return wishListMapper.notInWishList();
     }
 }
