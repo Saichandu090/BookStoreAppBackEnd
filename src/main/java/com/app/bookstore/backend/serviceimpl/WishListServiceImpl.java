@@ -55,7 +55,7 @@ public class WishListServiceImpl implements WishListService
         wishLists.removeIf(w -> w.getBook().equals(book));
 
         wishListRepository.saveAll(wishLists);
-        return wishListMapper.wishListRemoved();
+        return wishListMapper.wishListRemoved(book.getBookName());
     }
 
     @Override

@@ -39,6 +39,9 @@ public class CartServiceImpl implements CartService
         Book book = bookRepository.findById(requestDTO.getBookId())
                 .orElseThrow(() -> new BookNotFoundException("Book not found"));
 
+        if(book.getQuantity()<1)
+            throw new RuntimeException("Book is out of Stock");
+
         if(user.getCarts()==null)
             user.setCarts(new ArrayList<>());
         List<Cart> carts=user.getCarts();

@@ -12,7 +12,7 @@ public class WishListMapper
     {
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
-        responseDTO.setMessage("Book "+bName+" added to the wishlist!!");
+        responseDTO.setMessage(bName+" added to the wishlist!!");
         responseDTO.setData(List.of(wishList));
         return responseDTO;
     }
@@ -35,11 +35,11 @@ public class WishListMapper
         return responseDTO;
     }
 
-    public JsonResponseDTO wishListRemoved()
+    public JsonResponseDTO wishListRemoved(String bookName)
     {
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
-        responseDTO.setMessage("Book remove from the wishlist");
+        responseDTO.setMessage(bookName+" removed from the wishlist!!");
         responseDTO.setData(null);
         return responseDTO;
     }
