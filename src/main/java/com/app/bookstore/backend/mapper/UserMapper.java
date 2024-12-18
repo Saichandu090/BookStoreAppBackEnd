@@ -2,6 +2,7 @@ package com.app.bookstore.backend.mapper;
 
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.DTO.LoginResponseDTO;
+import com.app.bookstore.backend.DTO.UserEditDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.serviceimpl.JWTService;
@@ -110,12 +111,35 @@ public class UserMapper
     }
 
     // Convert User To JsonResponse
-    public JsonResponseDTO convertUser(User user)
+    public JsonResponseDTO convertUser(String message)
     {
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
-        responseDTO.setMessage("User Registered Successfully");
+        responseDTO.setMessage(message);
         responseDTO.setData(null);
+        return responseDTO;
+    }
+
+    public User editUser(User user,UserEditDTO editDTO)
+    {
+        user.setFirstName(editDTO.getFirstName());
+        user.setLastName(editDTO.getLastName());
+        user.setDob(editDTO.getDob());
+        user.setUpdatedDate(LocalDate.now());
+        return user;
+    }
+
+    public JsonResponseDTO returnUser(User user)
+    {
+        UserEditDTO editDTO=new UserEditDTO();
+        editDTO.setFirstName(user.getFirstName());
+        editDTO.setLastName(user.getLastName());
+        editDTO.setDob(user.getDob());
+
+        JsonResponseDTO responseDTO=new JsonResponseDTO();
+        responseDTO.setResult(true);
+        responseDTO.setMessage(null);
+        responseDTO.setData(List.of(editDTO));
         return responseDTO;
     }
 }

@@ -1,6 +1,7 @@
 package com.app.bookstore.backend.serviceimpl;
 
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.DTO.UserEditDTO;
 import com.app.bookstore.backend.DTO.UserLoginDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
 import com.app.bookstore.backend.exception.UserNotFoundException;
@@ -8,6 +9,7 @@ import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.repository.UserRepository;
 import com.app.bookstore.backend.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,18 +21,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService
 {
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private JWTService jwtService;
-
-    @Autowired
     ApplicationContext context;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     private final UserMapper userMapper=new UserMapper();
@@ -47,7 +43,7 @@ public class UserServiceImpl implements UserService
         User newUser=userMapper.convertFromRegisterDTO(registerDTO);
         newUser.setPassword(encoder.encode(newUser.getPassword()));
         User savedUser=userRepository.save(newUser);
-        return userMapper.convertUser(savedUser);
+        return userMapper.convertUser("User Registered Successfully!!");
     }
 
     @Override
@@ -71,5 +67,22 @@ public class UserServiceImpl implements UserService
             }
         }
         return userMapper.userNotExists();
+    }
+
+    @Override
+    public JsonResponseDTO editUser(String email, UserEditDTO editDTO)
+    {
+        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
+        User editedUser=userMapper.editUser(user,editDTO);
+        User res=userRepository.save(editedUser);
+
+        return userMapper.convertUser("User details edited Successfully!!");
+    }
+
+    @Override
+    public JsonResponseDTO getUserDetails(String email)
+    {
+        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
+        return userMapper.returnUser(user);
     }
 }
