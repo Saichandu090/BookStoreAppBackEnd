@@ -1,6 +1,7 @@
 package com.app.bookstore.backend.controller;
 
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.DTO.UserEditDTO;
 import com.app.bookstore.backend.DTO.UserLoginDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
 import com.app.bookstore.backend.config.SecurityConfig;
@@ -19,19 +20,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = UserController.class)
 @ExtendWith(MockitoExtension.class)
@@ -96,6 +103,78 @@ class UserControllerTest
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", CoreMatchers.is(expectedToken)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result",CoreMatchers.is(true)))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void UserController_EditUserDetails_ShouldEdit() throws Exception
+    {
+        String email="jenny090@gmail.com";
+        UserEditDTO editDTO=new UserEditDTO("Sai","Chandu",LocalDate.of(2005,8,24));
+        JsonResponseDTO responseDTO=new JsonResponseDTO(true,"User edited successfully",null);
+
+        String token="Bearer token";
+        given(jwtService.validateToken(ArgumentMatchers.any(),ArgumentMatchers.any())).willReturn(true);
+        given(userMapper.validateUserToken(ArgumentMatchers.any())).willReturn(new UserDetails() {
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return List.of(new SimpleGrantedAuthority("USER"));
+            }
+
+            @Override
+            public String getPassword() {
+                return "";
+            }
+
+            @Override
+            public String getUsername() {
+                return email;
+            }
+        });
+        given(userService.editUser(ArgumentMatchers.any(),ArgumentMatchers.any())).willReturn(responseDTO);
+
+        mockMvc.perform(put("/editUserDetails")
+                .header("Authorization",token)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(editDTO)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result",CoreMatchers.is(true)));
+    }
+
+    @Test
+    public void UserController_GetUser_ShouldReturnUser() throws Exception
+    {
+        String token="Bearer token";
+        String email="jenny090@gmail.com";
+        UserEditDTO editDTO=new UserEditDTO();
+        JsonResponseDTO responseDTO=new JsonResponseDTO(true,"Got the user",List.of(editDTO));
+
+        given(userService.getUserDetails(ArgumentMatchers.any())).willReturn(responseDTO);
+        given(userMapper.validateUserToken(ArgumentMatchers.any())).willReturn(new UserDetails() {
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return List.of(new SimpleGrantedAuthority("USER"));
+            }
+
+            @Override
+            public String getPassword() {
+                return "";
+            }
+
+            @Override
+            public String getUsername() {
+                return email;
+            }
+        });
+
+        mockMvc.perform(get("/getUser/jenny090@gmail.com")
+                .characterEncoding(StandardCharsets.UTF_8)
+                .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization",token))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",CoreMatchers.is(responseDTO.getMessage())))
                 .andDo(MockMvcResultHandlers.print());
     }
 }

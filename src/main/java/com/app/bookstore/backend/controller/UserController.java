@@ -49,7 +49,7 @@ public class UserController
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
         {
-            return new ResponseEntity<>(userService.editUser(userDetails.getUsername(),editDTO),HttpStatus.OK);
+            return new ResponseEntity<>(userService.editUser(userDetails.getUsername(),editDTO),HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.FORBIDDEN);
     }
