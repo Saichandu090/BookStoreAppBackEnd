@@ -40,7 +40,7 @@ public class BookController
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
         {
-            return new ResponseEntity<>(bookService.addBook(bookRequestDTO),HttpStatus.OK);
+            return new ResponseEntity<>(bookService.addBook(bookRequestDTO),HttpStatus.CREATED);
         }
         return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
     }
