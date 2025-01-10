@@ -33,7 +33,7 @@ public class UserController
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDTO registerDTO)
     {
-        return new ResponseEntity<>(userService.registerUser(registerDTO),HttpStatus.OK);
+        return new ResponseEntity<>(userService.registerUser(registerDTO),HttpStatus.CREATED);
     }
 
 

@@ -1,4 +1,4 @@
-package com.app.bookstore.backend.controller;
+package com.app.bookstore.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,24 +12,23 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-public class TestSecurityConfig
+public class SecurityConfig
 {
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception
-    {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
-        return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request->request.requestMatchers("/register","/login").permitAll()
-                        .anyRequest().authenticated())
-               // .cors(custom->custom.configurationSource(customCorsConfiguration))
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                .build();
+       return http.csrf(AbstractHttpConfigurer::disable)
+               .authorizeHttpRequests(request->request.requestMatchers("/register","/login").permitAll()
+                       .anyRequest().authenticated())
+               //.cors(custom->custom.configurationSource(customCorsConfiguration))
+               .httpBasic(Customizer.withDefaults())
+               .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+               //.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+               .build();
     }
 }

@@ -3,88 +3,99 @@ package com.app.bookstore.backend.controller;
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.DTO.UserLoginDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
+import com.app.bookstore.backend.config.SecurityConfig;
 import com.app.bookstore.backend.mapper.UserMapper;
-import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.service.UserService;
+import com.app.bookstore.backend.serviceimpl.JWTService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-@WebMvcTest(UserController.class)
-@Import(TestSecurityConfig.class)
+@WebMvcTest(controllers = UserController.class)
+@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
+@Import(SecurityConfig.class)
 class UserControllerTest
 {
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
-
-
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private ObjectMapper objectMapper;
 
     @MockBean
-    UserMapper userMapper;
+    private AuthenticationManager authenticationManager;
 
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private JWTService jwtService;
+
+    @MockBean
+    private UserMapper userMapper;
+
     @Test
-    public void registerUserTest() throws  Exception
+    public void UserController_RegisterUser_ReturnTrue() throws Exception
     {
-        UserRegisterDTO input=new UserRegisterDTO("First","Last",LocalDate.of(2002,5,4),"testing@123","test@gmail.com","USER");
-        String requestBody=objectMapper.writeValueAsString(input);
-
-        JsonResponseDTO dto=new JsonResponseDTO(true,"",null);
-
-        when(userService.registerUser(input))
-                .thenReturn(dto);
-
-        assertTrue(dto.isResult());
+        JsonResponseDTO responseDTO=new JsonResponseDTO(true,"User Registered Successfully",null);
+        UserRegisterDTO registerDTO=UserRegisterDTO.builder()
+                .firstName("Jenny")
+                        .lastName("Lamgade")
+                                .dob(LocalDate.of(2002,8,24))
+                                        .email("jenny090@gmail.com")
+                                                .password("jenny@090")
+                                                        .role("USER").build();
+        given(userService.registerUser(ArgumentMatchers.any())).willReturn(responseDTO);
 
         mockMvc.perform(post("/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
-                .andExpect(status().isOk());
-
-        System.out.println(objectMapper.writeValueAsString(input));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(registerDTO))
+                .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
-    public void loginTest() throws Exception
+    public void UserController_LoginUser_ReturnToken() throws Exception
     {
-        UserLoginDTO dto=new UserLoginDTO("test@gmail.com","testing@123");
-        String reqBody=objectMapper.writeValueAsString(dto);
+        UserLoginDTO loginDTO=new UserLoginDTO("jenny090@gmail.com","jenny@090");
+        String expectedToken="jwt-secret token";
 
-        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO(true,"",null);
+        JsonResponseDTO responseDTO=new JsonResponseDTO(true,expectedToken,null);
+        given(userService.login(ArgumentMatchers.any())).willReturn(responseDTO);
+        given(jwtService.generateToken(ArgumentMatchers.anyString()))
+                .willReturn(expectedToken);
 
-        when(userService.login(dto))
-                .thenReturn(jsonResponseDTO);
-
-        assertTrue(userService.login(dto).isResult());
-
-        System.out.println(objectMapper.writeValueAsString(jsonResponseDTO));
+        mockMvc.perform(post("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginDTO))
+                .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", CoreMatchers.is(expectedToken)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result",CoreMatchers.is(true)))
+                .andDo(MockMvcResultHandlers.print());
     }
 }
