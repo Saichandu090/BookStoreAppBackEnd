@@ -26,7 +26,7 @@ public class AddressController
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
         {
-            return new ResponseEntity<>(addressService.addAddress(userDetails.getUsername(),address), HttpStatus.OK);
+            return new ResponseEntity<>(addressService.addAddress(userDetails.getUsername(),address), HttpStatus.ACCEPTED);
         }
         else
             return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
