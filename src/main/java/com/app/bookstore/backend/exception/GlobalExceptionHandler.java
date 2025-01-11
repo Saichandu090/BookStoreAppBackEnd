@@ -44,28 +44,33 @@ public class GlobalExceptionHandler
     }
 
     @ExceptionHandler(OrderNotFoundException.class)
-    public ResponseEntity<?> insufficientFound(OrderNotFoundException e)
+    public ResponseEntity<?> orderNotFound(OrderNotFoundException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> insufficientFound(RuntimeException e)
+    public ResponseEntity<?> runTimeFound(RuntimeException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AddressNotFoundException.class)
-    public ResponseEntity<?> insufficientFound(AddressNotFoundException e)
+    public ResponseEntity<?> addressNotFound(AddressNotFoundException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> insufficientFound(BadCredentialsException e)
+    public ResponseEntity<?> badCredentials(BadCredentialsException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> exception(Exception exception)
+    {
+        return new ResponseEntity<>(exceptionMapper.exception(exception.getMessage()),HttpStatus.BAD_REQUEST);
+    }
 
 }
