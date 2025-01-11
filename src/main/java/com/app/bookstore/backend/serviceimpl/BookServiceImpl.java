@@ -29,12 +29,6 @@ public class BookServiceImpl implements BookService
 
     private final BookMapper bookMapper=new BookMapper();
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CartRepository cartRepository;
-
     public JsonResponseDTO addBook(BookRequestDTO requestDTO)
     {
         Book book=bookMapper.addBook(requestDTO);

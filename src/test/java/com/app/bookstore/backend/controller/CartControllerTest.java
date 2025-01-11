@@ -3,7 +3,6 @@ package com.app.bookstore.backend.controller;
 import com.app.bookstore.backend.DTO.CartRequestDTO;
 import com.app.bookstore.backend.DTO.CartResponseDTO;
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.config.SecurityConfig;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.service.CartService;
@@ -41,7 +40,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(controllers = CartController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-@Import(SecurityConfig.class)
 class CartControllerTest
 {
     @Autowired

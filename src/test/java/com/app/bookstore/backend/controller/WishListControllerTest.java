@@ -2,7 +2,6 @@ package com.app.bookstore.backend.controller;
 
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.DTO.WishListDTO;
-import com.app.bookstore.backend.config.SecurityConfig;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.User;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,7 +40,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(controllers = WishListController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-@Import(SecurityConfig.class)
 class WishListControllerTest
 {
     @Autowired
