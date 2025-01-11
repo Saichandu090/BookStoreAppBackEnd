@@ -35,7 +35,6 @@ public class OrderServiceImpl implements OrderService
         List<Address> userAddressList=user.getAddresses();
         Address address=addressRepository.findById(orderDTO.getAddressId()).orElseThrow(()->new AddressNotFoundException("Address not associated with User"));
 
-
         if(!userAddressList.contains(address))
             throw new RuntimeException("Address Required!!");
         List<Cart> carts=user.getCarts();
@@ -57,13 +56,14 @@ public class OrderServiceImpl implements OrderService
         //userRepository.save(user); If user is also saved then it's saving twice so don't do that
         cartRepository.saveAll(carts);
 
-        return orderMapper.saveOrder(orderRepository.save(order),"Order with Id "+order.getOrderId()+" placed successfully!!!");
+        Order savedOrder=orderRepository.save(order);
+        return orderMapper.saveOrder(savedOrder,"Order with Id "+savedOrder.getOrderId()+" placed successfully!!!");
     }
 
     @Override
     public JsonResponseDTO cancelOrder(String email, Long orderId)
     {
-        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
+        //User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
         Order order=orderRepository.findById(orderId).orElseThrow(()->new OrderNotFoundException("Order Not Found"));
 
         if(order.getCancelOrder()){

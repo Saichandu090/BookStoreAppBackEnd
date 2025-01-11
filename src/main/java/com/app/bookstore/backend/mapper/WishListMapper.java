@@ -21,7 +21,7 @@ public class WishListMapper
     {
         JsonResponseDTO responseDTO=new JsonResponseDTO();
         responseDTO.setResult(true);
-        responseDTO.setMessage("WishList retrieved!!");
+        responseDTO.setMessage("Book is in wishlist!!");
         responseDTO.setData(null);
         return responseDTO;
     }
