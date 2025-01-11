@@ -111,8 +111,8 @@ public class BookController
         return new ResponseEntity<>(bookMapper.noAuthority(),HttpStatus.FORBIDDEN);
     }
 
-    @PatchMapping("/updateBookPrice/{bookId}/{bookPrice}")
-    public ResponseEntity<?> updateBookPrice(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@PathVariable double bookPrice)
+    @PatchMapping("/updateBookPrice/{bookId}")
+    public ResponseEntity<?> updateBookPrice(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@RequestParam double bookPrice)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
