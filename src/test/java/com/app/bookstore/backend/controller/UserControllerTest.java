@@ -4,7 +4,6 @@ import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.DTO.UserEditDTO;
 import com.app.bookstore.backend.DTO.UserLoginDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
-import com.app.bookstore.backend.config.SecurityConfig;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.service.UserService;
 import com.app.bookstore.backend.serviceimpl.JWTService;
@@ -18,12 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -31,7 +26,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +35,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(controllers = UserController.class)
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc(addFilters = false)
-@Import(SecurityConfig.class)
 class UserControllerTest
 {
     @Autowired

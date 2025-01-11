@@ -28,7 +28,8 @@ public class CartServiceImpl implements CartService
    private CartRepository cartRepository;
    private BookRepository bookRepository;
    private UserRepository userRepository;
-   private CartMapper cartMapper;
+
+   private final CartMapper cartMapper=new CartMapper();
 
     @Override
     public JsonResponseDTO addToCart(String email, CartRequestDTO requestDTO)
@@ -51,7 +52,7 @@ public class CartServiceImpl implements CartService
                 {
                     book.setQuantity(book.getQuantity()- 1);
                     book.setCartBookQuantity(book.getCartBookQuantity()+ 1);
-                    return cartMapper.updateCartQuantity(cart);
+                    return cartMapper.updateCartQuantity(cartRepository.save(cart));
                 }
         }
 
