@@ -83,6 +83,28 @@ class BookServiceTest
     }
 
     @Test
+    public void BookService_sortByPriceASC_MustReturnAllBooks()
+    {
+        when(bookRepository.findAll()).thenReturn(List.of(book));
+
+        JsonResponseDTO responseDTO=bookService.sortByPriceASC();
+        Assertions.assertThat(responseDTO).isNotNull();
+        Assertions.assertThat(responseDTO.isResult()).isEqualTo(true);
+        Assertions.assertThat(responseDTO.getData().size()).isEqualTo(1);
+    }
+
+    @Test
+    public void BookService_sortByBookNameASC_MustReturnAllBooks()
+    {
+        when(bookRepository.findAll()).thenReturn(List.of(book));
+
+        JsonResponseDTO responseDTO=bookService.sortByBookNameASC();
+        Assertions.assertThat(responseDTO).isNotNull();
+        Assertions.assertThat(responseDTO.isResult()).isEqualTo(true);
+        Assertions.assertThat(responseDTO.getData().size()).isEqualTo(1);
+    }
+
+    @Test
     public void BookService_FindById_MustReturnBookById()
     {
         when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(book));
