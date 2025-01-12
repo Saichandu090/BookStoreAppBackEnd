@@ -4,6 +4,7 @@ import com.app.bookstore.backend.DTO.BookRequestDTO;
 import com.app.bookstore.backend.DTO.BookResponseDTO;
 import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
+import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.service.BookService;
 import com.app.bookstore.backend.serviceimpl.JWTService;
@@ -163,6 +164,80 @@ class BookControllerTest
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", CoreMatchers.is(responseDTO.getMessage())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name",CoreMatchers.is(bookResponseDTO.getName())));
+    }
+
+    @Test
+    public void BookController_SortByBookNameASC_MustReturnAllBooks() throws Exception
+    {
+        String token="Bearer token";
+        Book book1= Book.builder()
+                .bookId(1L)
+                .bookName("Atomic Habits")
+                .price(199.90)
+                .bookLogo("URL")
+                .author("James Clear")
+                .quantity(45)
+                .description("Improve 1% everyday").build();
+
+        Book book2= Book.builder()
+                .bookId(2L)
+                .bookName("Deep Work")
+                .price(199.90)
+                .bookLogo("URL")
+                .author("James Clear")
+                .quantity(45)
+                .description("Improve 1% everyday").build();
+
+        JsonResponseDTO responseDTO=new JsonResponseDTO(true,"Books fetched successfully", List.of(book1,book2));
+
+        given(bookService.sortByBookNameASC()).willReturn(responseDTO);
+        given(userMapper.validateUserToken(ArgumentMatchers.any())).willReturn(userDetails);
+
+        mockMvc.perform(get("/books/sortByBookNameASC")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .header("Authorization",token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", CoreMatchers.is(responseDTO.getMessage())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].bookName",CoreMatchers.is(book1.getBookName())));
+    }
+
+    @Test
+    public void BookController_SortByBookPriceASC_MustReturnAllBooks() throws Exception
+    {
+        String token="Bearer token";
+        Book book1= Book.builder()
+                .bookId(1L)
+                .bookName("Atomic Habits")
+                .price(199.90)
+                .bookLogo("URL")
+                .author("James Clear")
+                .quantity(45)
+                .description("Improve 1% everyday").build();
+
+        Book book2= Book.builder()
+                .bookId(2L)
+                .bookName("Deep Work")
+                .price(399.90)
+                .bookLogo("URL")
+                .author("James Clear")
+                .quantity(45)
+                .description("Improve 1% everyday").build();
+
+        JsonResponseDTO responseDTO=new JsonResponseDTO(true,"Books fetched successfully", List.of(book1,book2));
+
+        given(bookService.sortByPriceASC()).willReturn(responseDTO);
+        given(userMapper.validateUserToken(ArgumentMatchers.any())).willReturn(userDetails);
+
+        mockMvc.perform(get("/books/sortByBookPriceASC")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .header("Authorization",token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", CoreMatchers.is(responseDTO.getMessage())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].bookName",CoreMatchers.is(book1.getBookName())));
     }
 
     @Test
