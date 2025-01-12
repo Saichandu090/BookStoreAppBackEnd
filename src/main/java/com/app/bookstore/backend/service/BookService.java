@@ -17,6 +17,10 @@ public interface BookService
 
     public JsonResponseDTO updateBook(Long bookId,BookRequestDTO requestDTO);
 
+    public JsonResponseDTO sortByPriceASC();
+
+    public JsonResponseDTO sortByBookNameASC();
+
     public JsonResponseDTO deleteBook(Long bookId);
 
     public JsonResponseDTO updateBookQuantity(Long bookId, int quantity);

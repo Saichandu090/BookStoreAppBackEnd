@@ -1,5 +1,6 @@
 package com.app.bookstore.backend.exception;
 
+import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.ExceptionMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,61 +15,61 @@ public class GlobalExceptionHandler
     private final ExceptionMapper exceptionMapper=new ExceptionMapper();
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> userNotFound(UserNotFoundException e)
+    public ResponseEntity<JsonResponseDTO> userNotFound(UserNotFoundException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<?> bookNotFound(BookNotFoundException e)
+    public ResponseEntity<JsonResponseDTO> bookNotFound(BookNotFoundException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<?> invalidToken(InvalidTokenException e)
+    public ResponseEntity<JsonResponseDTO> invalidToken(InvalidTokenException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<?> cartNotFound(CartNotFoundException e)
+    public ResponseEntity<JsonResponseDTO> cartNotFound(CartNotFoundException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InsufficientStockException.class)
-    public ResponseEntity<?> insufficientFound(InsufficientStockException e)
+    public ResponseEntity<JsonResponseDTO> insufficientFound(InsufficientStockException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(OrderNotFoundException.class)
-    public ResponseEntity<?> orderNotFound(OrderNotFoundException e)
+    public ResponseEntity<JsonResponseDTO> orderNotFound(OrderNotFoundException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> runTimeFound(RuntimeException e)
+    public ResponseEntity<JsonResponseDTO> runTimeFound(RuntimeException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AddressNotFoundException.class)
-    public ResponseEntity<?> addressNotFound(AddressNotFoundException e)
+    public ResponseEntity<JsonResponseDTO> addressNotFound(AddressNotFoundException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> badCredentials(BadCredentialsException e)
+    public ResponseEntity<JsonResponseDTO> badCredentials(BadCredentialsException e)
     {
         return new ResponseEntity<>(exceptionMapper.exception(e.getMessage()),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> exception(Exception exception)
+    public ResponseEntity<JsonResponseDTO> exception(Exception exception)
     {
         return new ResponseEntity<>(exceptionMapper.exception(exception.getMessage()),HttpStatus.BAD_REQUEST);
     }

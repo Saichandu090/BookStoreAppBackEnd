@@ -9,22 +9,20 @@ public class AddressMapper
 {
     public Address addAddress(Long userId,Address address)
     {
-        Address address1=new Address();
-        address1.setStreetName(address.getStreetName());
-        address1.setCity(address.getCity());
-        address1.setState(address.getState());
-        address1.setPinCode(address.getPinCode());
-        address1.setUserId(userId);
-        return address1;
+        return Address.builder()
+                .streetName(address.getStreetName())
+                .city(address.getCity())
+                .pinCode(address.getPinCode())
+                .state(address.getState())
+                .userId(userId).build();
     }
 
     public JsonResponseDTO saveAddress(Address address)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("Address added Successfully!!");
-        responseDTO.setData(List.of(address));
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .data(List.of(address))
+                .result(true)
+                .message("Address added Successfully!!").build();
     }
 
     public Address editAddress(Address oldAddress,Address address)
@@ -38,29 +36,26 @@ public class AddressMapper
 
     public JsonResponseDTO deleteAddress()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("Address deleted Successfully!!");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .data(null)
+                .result(true)
+                .message("Address deleted Successfully!!").build();
     }
 
     public JsonResponseDTO sendList(List<Address> addresses)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("Address retrieved Successfully!!");
-        responseDTO.setData(addresses);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .data(addresses)
+                .result(true)
+                .message("Address retrieved Successfully!!").build();
     }
 
 
     public JsonResponseDTO addressNotFound(String message)
     {
-        JsonResponseDTO responseDTO = new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage(message);
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .data(null)
+                .result(false)
+                .message(message).build();
     }
 }

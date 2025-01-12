@@ -1,6 +1,7 @@
 package com.app.bookstore.backend.controller;
 
 import com.app.bookstore.backend.DTO.CartRequestDTO;
+import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class CartController
     private UserMapper userMapper;
 
     @PostMapping("/addToCart")
-    public ResponseEntity<?> addToCart(@RequestHeader("Authorization")String authHeader, @RequestBody CartRequestDTO requestDTO)
+    public ResponseEntity<JsonResponseDTO> addToCart(@RequestHeader("Authorization")String authHeader, @RequestBody CartRequestDTO requestDTO)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -34,7 +35,7 @@ public class CartController
     }
 
     @GetMapping("/getCart")
-    public ResponseEntity<?> getUserCart(@RequestHeader("Authorization")String authHeader)
+    public ResponseEntity<JsonResponseDTO> getUserCart(@RequestHeader("Authorization")String authHeader)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -48,7 +49,7 @@ public class CartController
     }
 
     @GetMapping("/getCartById/{id}")
-    public ResponseEntity<?> getUserCartById(@RequestHeader("Authorization")String authHeader,@PathVariable Long id)
+    public ResponseEntity<JsonResponseDTO> getUserCartById(@RequestHeader("Authorization")String authHeader,@PathVariable Long id)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -62,7 +63,7 @@ public class CartController
     }
 
     @DeleteMapping("/removeFromCart/{cartId}")
-    public ResponseEntity<?> removeFromCart(@RequestHeader("Authorization")String authHeader,@PathVariable Long cartId)
+    public ResponseEntity<JsonResponseDTO> removeFromCart(@RequestHeader("Authorization")String authHeader,@PathVariable Long cartId)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -76,7 +77,7 @@ public class CartController
     }
 
     @DeleteMapping("/clearCart")
-    public ResponseEntity<?> clearCart(@RequestHeader("Authorization")String authHeader)
+    public ResponseEntity<JsonResponseDTO> clearCart(@RequestHeader("Authorization")String authHeader)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -90,7 +91,7 @@ public class CartController
     }
 
     @GetMapping("/getAllCarts")
-    public ResponseEntity<?> getAllCarts(@RequestHeader("Authorization")String authHeader)
+    public ResponseEntity<JsonResponseDTO> getAllCarts(@RequestHeader("Authorization")String authHeader)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))

@@ -2,6 +2,7 @@ package com.app.bookstore.backend.controller;
 
 import com.app.bookstore.backend.DTO.BookRequestDTO;
 import com.app.bookstore.backend.DTO.BookResponseDTO;
+import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.exception.InvalidTokenException;
 import com.app.bookstore.backend.mapper.BookMapper;
 import com.app.bookstore.backend.mapper.UserMapper;
@@ -35,7 +36,7 @@ public class BookController
     private UserMapper userMapper;
 
     @PostMapping("/addBook")
-    public ResponseEntity<?> addBook(@RequestHeader("Authorization") String authHeader,@Valid @RequestBody BookRequestDTO bookRequestDTO)
+    public ResponseEntity<JsonResponseDTO> addBook(@RequestHeader("Authorization") String authHeader, @Valid @RequestBody BookRequestDTO bookRequestDTO)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
@@ -46,7 +47,7 @@ public class BookController
     }
 
     @GetMapping("/allBooks")
-    public ResponseEntity<?> getAllBooks(@RequestHeader("Authorization") String authHeader)
+    public ResponseEntity<JsonResponseDTO> getAllBooks(@RequestHeader("Authorization") String authHeader)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
@@ -57,7 +58,7 @@ public class BookController
     }
 
     @GetMapping("/byBookId/{id}")
-    public ResponseEntity<?> getBookById(@RequestHeader("Authorization") String authHeader,@PathVariable Long id)
+    public ResponseEntity<JsonResponseDTO> getBookById(@RequestHeader("Authorization") String authHeader,@PathVariable Long id)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
@@ -68,7 +69,7 @@ public class BookController
     }
 
     @GetMapping("/byBookName/{bookName}")
-    public ResponseEntity<?> getBookByName(@RequestHeader("Authorization") String authHeader,@PathVariable String bookName)
+    public ResponseEntity<JsonResponseDTO> getBookByName(@RequestHeader("Authorization") String authHeader,@PathVariable String bookName)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
@@ -78,8 +79,30 @@ public class BookController
         return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.FORBIDDEN);
     }
 
+    @GetMapping("/sortByBookPriceASC")
+    public ResponseEntity<JsonResponseDTO> sortByPrice(@RequestHeader("Authorization") String authHeader)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null)
+        {
+            return new ResponseEntity<>(bookService.sortByPriceASC(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/sortByBookNameASC")
+    public ResponseEntity<JsonResponseDTO> sortByName(@RequestHeader("Authorization") String authHeader)
+    {
+        UserDetails userDetails=userMapper.validateUserToken(authHeader);
+        if(userDetails!=null)
+        {
+            return new ResponseEntity<>(bookService.sortByBookNameASC(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(userMapper.userDetailsFailure(),HttpStatus.FORBIDDEN);
+    }
+
     @PutMapping("/updateBook/{bookId}")
-    public ResponseEntity<?> editBook(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@Valid @RequestBody BookRequestDTO bookRequestDTO)
+    public ResponseEntity<JsonResponseDTO> editBook(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@Valid @RequestBody BookRequestDTO bookRequestDTO)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
@@ -90,7 +113,7 @@ public class BookController
     }
 
     @DeleteMapping("/deleteBook/{bookId}")
-    public ResponseEntity<?> deleteBook(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId)
+    public ResponseEntity<JsonResponseDTO> deleteBook(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
@@ -101,7 +124,7 @@ public class BookController
     }
 
     @PatchMapping("/updateBookQuantity/{bookId}")
-    public ResponseEntity<?> updateBookQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@RequestParam int quantity)
+    public ResponseEntity<JsonResponseDTO> updateBookQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@RequestParam int quantity)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
@@ -112,7 +135,7 @@ public class BookController
     }
 
     @PatchMapping("/updateBookPrice/{bookId}")
-    public ResponseEntity<?> updateBookPrice(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@RequestParam double bookPrice)
+    public ResponseEntity<JsonResponseDTO> updateBookPrice(@RequestHeader("Authorization") String authHeader,@PathVariable Long bookId,@RequestParam double bookPrice)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))

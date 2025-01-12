@@ -1,5 +1,6 @@
 package com.app.bookstore.backend.controller;
 
+import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.DTO.UserEditDTO;
 import com.app.bookstore.backend.DTO.UserLoginDTO;
 import com.app.bookstore.backend.DTO.UserRegisterDTO;
@@ -31,20 +32,20 @@ public class UserController
     private UserMapper userMapper;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDTO registerDTO)
+    public ResponseEntity<JsonResponseDTO> registerUser(@Valid @RequestBody UserRegisterDTO registerDTO)
     {
         return new ResponseEntity<>(userService.registerUser(registerDTO),HttpStatus.CREATED);
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO loginDTO)
+    public ResponseEntity<JsonResponseDTO> login(@Valid @RequestBody UserLoginDTO loginDTO)
     {
         return new ResponseEntity<>(userService.login(loginDTO),HttpStatus.OK);
     }
 
     @PutMapping("/editUserDetails")
-    public ResponseEntity<?> editUserDetails(@RequestHeader("Authorization")String authHeader,@Valid @RequestBody UserEditDTO editDTO)
+    public ResponseEntity<JsonResponseDTO> editUserDetails(@RequestHeader("Authorization")String authHeader,@Valid @RequestBody UserEditDTO editDTO)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
@@ -55,7 +56,7 @@ public class UserController
     }
 
     @GetMapping("/getUser/{email}")
-    public ResponseEntity<?> getUserDetails(@RequestHeader("Authorization")String authHeader,@PathVariable String email)
+    public ResponseEntity<JsonResponseDTO> getUserDetails(@RequestHeader("Authorization")String authHeader,@PathVariable String email)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)

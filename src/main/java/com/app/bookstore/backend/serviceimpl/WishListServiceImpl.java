@@ -37,10 +37,9 @@ public class WishListServiceImpl implements WishListService
         List<WishList> wishList=user.getWishList();
         if(wishList==null)
             user.setWishList(new ArrayList<>());
-        WishList wishList1=new WishList();
-        wishList1.setBook(book);
-        wishList1.setUserId(user.getUserId());
-
+        WishList wishList1=WishList.builder()
+                        .book(book)
+                                .userId(user.getUserId()).build();
         user.getWishList().add(wishList1);
 
         return wishListMapper.returnList(wishListRepository.save(wishList1),book.getBookName());
