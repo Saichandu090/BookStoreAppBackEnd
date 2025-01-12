@@ -1,5 +1,6 @@
 package com.app.bookstore.backend.controller;
 
+import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.DTO.WishListDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Book;
@@ -23,7 +24,7 @@ public class WishListController
     private UserMapper userMapper;
 
     @PostMapping("/addToWishList")
-    public ResponseEntity<?> addToWishList(@RequestHeader("Authorization")String authHeader, @RequestBody WishListDTO wishListDTO)
+    public ResponseEntity<JsonResponseDTO> addToWishList(@RequestHeader("Authorization")String authHeader, @RequestBody WishListDTO wishListDTO)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -35,7 +36,7 @@ public class WishListController
     }
 
     @DeleteMapping("/removeFromWishList/{bookId}")
-    public ResponseEntity<?> removeFromWishList(@RequestHeader("Authorization")String authHeader, @PathVariable Long bookId)
+    public ResponseEntity<JsonResponseDTO> removeFromWishList(@RequestHeader("Authorization")String authHeader, @PathVariable Long bookId)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -47,7 +48,7 @@ public class WishListController
     }
 
     @GetMapping("/getWishList")
-    public ResponseEntity<?> getWishList(@RequestHeader("Authorization")String authHeader)
+    public ResponseEntity<JsonResponseDTO> getWishList(@RequestHeader("Authorization")String authHeader)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -59,7 +60,7 @@ public class WishListController
     }
 
     @GetMapping("/isInWishList/{bookId}")
-    public ResponseEntity<?> inWishList(@RequestHeader("Authorization")String authHeader, @PathVariable Long bookId)
+    public ResponseEntity<JsonResponseDTO> inWishList(@RequestHeader("Authorization")String authHeader, @PathVariable Long bookId)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))

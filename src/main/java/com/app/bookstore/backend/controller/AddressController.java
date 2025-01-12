@@ -1,5 +1,6 @@
 package com.app.bookstore.backend.controller;
 
+import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Address;
 import com.app.bookstore.backend.service.AddressService;
@@ -21,7 +22,7 @@ public class AddressController
     private AddressService addressService;
 
     @PostMapping("/addAddress")
-    public ResponseEntity<?> addAddress(@RequestHeader("Authorization")String authHeader, @RequestBody Address address)
+    public ResponseEntity<JsonResponseDTO> addAddress(@RequestHeader("Authorization")String authHeader, @RequestBody Address address)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
@@ -33,7 +34,7 @@ public class AddressController
     }
 
     @PutMapping("/editAddress/{addressId}")
-    public ResponseEntity<?> editAddress(@RequestHeader("Authorization")String authHeader,@PathVariable Long addressId, @RequestBody Address address)
+    public ResponseEntity<JsonResponseDTO> editAddress(@RequestHeader("Authorization")String authHeader,@PathVariable Long addressId, @RequestBody Address address)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
@@ -45,7 +46,7 @@ public class AddressController
     }
 
     @DeleteMapping("/deleteAddress/{addressId}")
-    public ResponseEntity<?> deleteAddress(@RequestHeader("Authorization")String authHeader,@PathVariable Long addressId)
+    public ResponseEntity<JsonResponseDTO> deleteAddress(@RequestHeader("Authorization")String authHeader,@PathVariable Long addressId)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
@@ -57,7 +58,7 @@ public class AddressController
     }
 
     @GetMapping("/allAddress")
-    public ResponseEntity<?> getAllUserAddress(@RequestHeader("Authorization")String authHeader)
+    public ResponseEntity<JsonResponseDTO> getAllUserAddress(@RequestHeader("Authorization")String authHeader)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
@@ -69,7 +70,7 @@ public class AddressController
     }
 
     @GetMapping("/getAddressById/{addressId}")
-    public ResponseEntity<?> getUserAddressById(@RequestHeader("Authorization")String authHeader,@PathVariable Long addressId)
+    public ResponseEntity<JsonResponseDTO> getUserAddressById(@RequestHeader("Authorization")String authHeader,@PathVariable Long addressId)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)

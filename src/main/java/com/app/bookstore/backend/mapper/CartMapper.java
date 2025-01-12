@@ -12,17 +12,6 @@ import java.util.List;
 
 public class CartMapper
 {
-    //Converting User,Book and quantity to Cart
-    public Cart addToCart(User user, Book book, int quantity)
-    {
-        Cart cart=new Cart();
-        //cart.setBooks(List.of(book));
-        //cart.setUser(user);
-        cart.setQuantity(quantity);
-        cart.setTotalPrice(cart.getQuantity()*book.getPrice());
-        return cart;
-    }
-
     public JsonResponseDTO updateCartQuantity(Cart cart)
     {
         cart.setQuantity(cart.getQuantity()+1);
@@ -33,81 +22,47 @@ public class CartMapper
     //Converting Cart to JsonResponseDTO
     public JsonResponseDTO saveCart(Cart cart)
     {
-        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
-        jsonResponseDTO.setMessage("Book added to cart");
-        jsonResponseDTO.setData(List.of(cart));
-        jsonResponseDTO.setResult(true);
-        return jsonResponseDTO;
-    }
-
-    public JsonResponseDTO updateCart(Cart cart)
-    {
-        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
-        jsonResponseDTO.setMessage("Book removed from cart");
-        jsonResponseDTO.setData(List.of(cart));
-        jsonResponseDTO.setResult(true);
-        return jsonResponseDTO;
-    }
-
-    public JsonResponseDTO removeCart(Cart cart)
-    {
-        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
-        jsonResponseDTO.setMessage("Cart is Empty");
-        jsonResponseDTO.setData(null);
-        jsonResponseDTO.setResult(true);
-        return jsonResponseDTO;
+        return JsonResponseDTO.builder()
+                .message("Book added to cart")
+                .result(true)
+                .data(List.of(cart)).build();
     }
 
     public JsonResponseDTO returnCart(Cart cart)
     {
-
-        //Converting Cart to CartResponseDTO
-        CartResponseDTO dto=new CartResponseDTO();
-        dto.setUserId(cart.getUserId());
-        dto.setCartId(cart.getCartId());
-        dto.setBookId(cart.getBook().getBookId());
-        dto.setBookLogo(cart.getBook().getBookLogo());
-        dto.setQuantity(cart.getQuantity());
-        dto.setTotalPrice(cart.getTotalPrice());
-        dto.setBookName(cart.getBook().getBookName());
-
+        CartResponseDTO dto= CartResponseDTO.builder()
+                .userId(cart.getCartId())
+                .cartId(cart.getCartId())
+                .bookId(cart.getBook().getBookId())
+                .bookLogo(cart.getBook().getBookLogo())
+                .quantity(cart.getQuantity())
+                .totalPrice(cart.getTotalPrice())
+                .bookName(cart.getBook().getBookName()).build();
         List<CartResponseDTO> list=new ArrayList<>();
         list.add(dto);
 
-        //Converting CartResponseDTO to JsonResponseDTO
-        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
-        jsonResponseDTO.setMessage("Cart returned");
-        jsonResponseDTO.setData(list);
-        jsonResponseDTO.setResult(true);
-        return jsonResponseDTO;
-    }
-
-    //If Cart is Empty
-    public JsonResponseDTO cartEmpty()
-    {
-        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
-        jsonResponseDTO.setMessage("Cart is empty");
-        jsonResponseDTO.setData(null);
-        jsonResponseDTO.setResult(true);
-        return jsonResponseDTO;
+        return JsonResponseDTO.builder()
+                .data(list)
+                .result(true)
+                .message("Cart returned").build();
     }
 
     public JsonResponseDTO returnCartList(List<Cart> carts)
     {
-       List<CartResponseDTO> responseDTOS=carts.stream().map(cart -> new CartResponseDTO(cart.getCartId(),cart.getUserId(),cart.getBook().getBookId(),cart.getBook().getBookName(),cart.getBook().getBookLogo(),cart.getQuantity(), cart.getTotalPrice())).toList();
-        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
-        jsonResponseDTO.setMessage("Carts retrieved successfully!!");
-        jsonResponseDTO.setData(responseDTOS);
-        jsonResponseDTO.setResult(true);
-        return jsonResponseDTO;
+       List<CartResponseDTO> responseDTOS=
+               carts.stream().map(cart -> new CartResponseDTO(cart.getCartId(),cart.getUserId(),cart.getBook().getBookId(),cart.getBook().getBookName(),cart.getBook().getBookLogo(),cart.getQuantity(), cart.getTotalPrice())).toList();
+
+       return JsonResponseDTO.builder()
+               .message("Carts retrieved successfully!!")
+               .data(responseDTOS)
+               .result(true).build();
     }
 
     public JsonResponseDTO cartRemoved(String message)
     {
-        JsonResponseDTO jsonResponseDTO=new JsonResponseDTO();
-        jsonResponseDTO.setMessage(message);
-        jsonResponseDTO.setData(null);
-        jsonResponseDTO.setResult(true);
-        return jsonResponseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .message(message)
+                .data(null).build();
     }
 }

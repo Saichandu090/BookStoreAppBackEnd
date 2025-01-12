@@ -6,10 +6,9 @@ public class ExceptionMapper
 {
     public JsonResponseDTO exception(String message)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage(message);
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(false)
+                .data(null)
+                .message(message).build();
     }
 }

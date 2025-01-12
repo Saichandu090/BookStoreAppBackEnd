@@ -1,5 +1,6 @@
 package com.app.bookstore.backend.controller;
 
+import com.app.bookstore.backend.DTO.JsonResponseDTO;
 import com.app.bookstore.backend.DTO.OrderDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Address;
@@ -24,7 +25,7 @@ public class OrderController
     private UserMapper userMapper;
 
     @PostMapping("/placeOrder")
-    public ResponseEntity<?> placeOrder(@RequestHeader("Authorization")String authHeader, @RequestBody OrderDTO orderDTO)
+    public ResponseEntity<JsonResponseDTO> placeOrder(@RequestHeader("Authorization")String authHeader, @RequestBody OrderDTO orderDTO)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -36,7 +37,7 @@ public class OrderController
     }
 
     @DeleteMapping("/cancelOrder/{orderId}")
-    public ResponseEntity<?> cancelOrder(@RequestHeader("Authorization")String authHeader,@PathVariable Long orderId)
+    public ResponseEntity<JsonResponseDTO> cancelOrder(@RequestHeader("Authorization")String authHeader,@PathVariable Long orderId)
     {
         System.out.println(orderId);
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
@@ -49,7 +50,7 @@ public class OrderController
     }
 
     @GetMapping("/getAllUserOrders")
-    public ResponseEntity<?> getAllOrdersForUser(@RequestHeader("Authorization")String authHeader)
+    public ResponseEntity<JsonResponseDTO> getAllOrdersForUser(@RequestHeader("Authorization")String authHeader)
     {
         UserDetails userDetails= userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("USER")))
@@ -61,7 +62,7 @@ public class OrderController
     }
 
     @GetMapping("/getAllOrders")
-    public ResponseEntity<?> getAllOrders(@RequestHeader("Authorization")String authHeader)
+    public ResponseEntity<JsonResponseDTO> getAllOrders(@RequestHeader("Authorization")String authHeader)
     {
         UserDetails userDetails= userMapper.validateUserToken(authHeader);
         if(userDetails!=null && userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))

@@ -18,6 +18,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,22 @@ public class BookServiceImpl implements BookService
     {
         Book book=bookRepository.findById(bookId).orElseThrow(()->new BookNotFoundException("Book Not Found"));
         return bookMapper.bookFound(book);
+    }
+
+    @Override
+    public JsonResponseDTO sortByPriceASC()
+    {
+        List<Book> bookList=bookRepository.findAll();
+        List<Book> rs=bookList.stream().sorted(Comparator.comparingDouble(Book::getPrice)).toList();
+        return bookMapper.sendBookList(rs);
+    }
+
+    @Override
+    public JsonResponseDTO sortByBookNameASC()
+    {
+        List<Book> bookList=bookRepository.findAll();
+        List<Book> rs=bookList.stream().sorted(Comparator.comparing(Book::getBookName)).toList();
+        return bookMapper.sendBookList(rs);
     }
 
     @Override

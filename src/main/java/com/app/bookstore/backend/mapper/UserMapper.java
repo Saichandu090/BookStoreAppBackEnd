@@ -46,78 +46,70 @@ public class UserMapper
     // Returning in case of Wrong User Details
     public JsonResponseDTO userDetailsFailure()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage("Invalid User Details");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(false)
+                .message("Invalid User Details")
+                .data(null).build();
     }
 
     public JsonResponseDTO noAuthority()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage("No Authority");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(false)
+                .message("No Authority")
+                .data(null).build();
     }
 
     //If user Already Exists
     public JsonResponseDTO userAlreadyExists()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage("User Already Exists");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(false)
+                .message("User Already Exists")
+                .data(null).build();
     }
 
-    // If user try to login without register
+    // If user try to log in without register
     public JsonResponseDTO userNotExists()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage("User not Exists");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(false)
+                .message("User not Exists")
+                .data(null).build();
     }
 
-    //
     public JsonResponseDTO loginSuccess(String token,String email,String role)
     {
         List<LoginResponseDTO> list=new ArrayList<>();
         list.add(new LoginResponseDTO(email,role));
 
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage(token);
-        responseDTO.setData(list);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .message(token)
+                .data(list).build();
     }
 
     // Converting RegisterDTO to User
     public User convertFromRegisterDTO(UserRegisterDTO registerDTO)
     {
-        User user=new User();
-        user.setEmail(registerDTO.getEmail());
-        user.setDob(registerDTO.getDob());
-        user.setRegisteredDate(LocalDate.now());
-        user.setUpdatedDate(LocalDate.now());
-        user.setFirstName(registerDTO.getFirstName());
-        user.setLastName(registerDTO.getLastName());
-        user.setRole(registerDTO.getRole());
-        user.setPassword(registerDTO.getPassword());
-        return user;
+        return User.builder()
+                .email(registerDTO.getEmail())
+                .dob(registerDTO.getDob())
+                .registeredDate(LocalDate.now())
+                .updatedDate(null)
+                .firstName(registerDTO.getFirstName())
+                .lastName(registerDTO.getLastName())
+                .role(registerDTO.getRole())
+                .password(registerDTO.getPassword()).build();
     }
 
     // Convert User To JsonResponse
     public JsonResponseDTO convertUser(String message)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage(message);
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .message(message)
+                .data(null).build();
     }
 
     public User editUser(User user,UserEditDTO editDTO)
@@ -131,15 +123,13 @@ public class UserMapper
 
     public JsonResponseDTO returnUser(User user)
     {
-        UserEditDTO editDTO=new UserEditDTO();
-        editDTO.setFirstName(user.getFirstName());
-        editDTO.setLastName(user.getLastName());
-        editDTO.setDob(user.getDob());
-
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage(null);
-        responseDTO.setData(List.of(editDTO));
-        return responseDTO;
+        UserEditDTO editDTO=UserEditDTO.builder()
+                        .firstName(user.getFirstName())
+                                .lastName(user.getLastName())
+                                        .dob(user.getDob()).build();
+        return JsonResponseDTO.builder()
+                .result(true)
+                .data(List.of(editDTO))
+                .message(null).build();
     }
 }

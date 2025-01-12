@@ -10,46 +10,41 @@ public class WishListMapper
 {
     public JsonResponseDTO returnList(WishList wishList,String bName)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage(bName+" added to the wishlist!!");
-        responseDTO.setData(List.of(wishList));
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .data(List.of(wishList))
+                .message(bName+" added to the wishlist!!").build();
     }
 
     public JsonResponseDTO inWishList()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("Book is in wishlist!!");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .data(null)
+                .message("Book is in wishlist!!").build();
     }
 
     public JsonResponseDTO notInWishList()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage("WishList retrieved!!");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(false)
+                .data(null)
+                .message("WishList retrieved!!").build();
     }
 
     public JsonResponseDTO wishListRemoved(String bookName)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage(bookName+" removed from the wishlist!!");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .message(bookName+" removed from the wishlist!!")
+                .data(null).build();
     }
 
     public JsonResponseDTO returnWishList(List<Book> books)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("WishList retrieved");
-        responseDTO.setData(books);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .message("WishList retrieved")
+                .data(books).build();
     }
 }

@@ -12,115 +12,94 @@ import java.util.List;
 
 public class BookMapper
 {
-    @Autowired
-    private BookRepository bookRepository;
-
-
     public JsonResponseDTO noAuthority()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage("No Authority");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .data(null)
+                .result(false)
+                .message("No Authority").build();
     }
 
     // Converting RequestDTO to Book
     public Book addBook(BookRequestDTO requestDTO)
     {
-        Book book=new Book();
-        book.setBookLogo(requestDTO.getBookLogo());
-        book.setBookName(requestDTO.getName());
-        book.setAuthor(requestDTO.getAuthor());
-        book.setQuantity(requestDTO.getQuantity());
-        book.setPrice(requestDTO.getPrice());
-        book.setDescription(requestDTO.getDescription());
-        book.setCartBookQuantity(0);
-        return book;
+        return Book.builder()
+                .bookName(requestDTO.getName())
+                .bookLogo(requestDTO.getBookLogo())
+                .author(requestDTO.getAuthor())
+                .quantity(requestDTO.getQuantity())
+                .price(requestDTO.getPrice())
+                .description(requestDTO.getDescription())
+                .cartBookQuantity(0).build();
     }
 
     public Book updateBook(Long bookId,BookRequestDTO requestDTO)
     {
-        Book book=new Book();
+        Book book=addBook(requestDTO);
         book.setBookId(bookId);
-        book.setBookLogo(requestDTO.getBookLogo());
-        book.setBookName(requestDTO.getName());
-        book.setAuthor(requestDTO.getAuthor());
-        book.setQuantity(requestDTO.getQuantity());
-        book.setPrice(requestDTO.getPrice());
-        book.setDescription(requestDTO.getDescription());
-        book.setCartBookQuantity(0);
         return book;
     }
 
     public JsonResponseDTO deleteBook(String bookName)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("Book with name '"+bookName+"' has deleted Successfully");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .message("Book with name '"+bookName+"' has deleted Successfully")
+                .data(null)
+                .result(true).build();
     }
 
     // Returning message after saving Book in DB
     public JsonResponseDTO bookSaved(Book book)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("Book Saved SuccessFully");
-        responseDTO.setData(List.of(book));
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .data(List.of(book))
+                .message("Book Saved SuccessFully").build();
     }
 
     public JsonResponseDTO bookUpdated(Book book,String message)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage(message);
-        responseDTO.setData(List.of(book));
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .data(List.of(book))
+                .message(message).build();
     }
 
     public JsonResponseDTO bookFound(Book book)
     {
         BookResponseDTO dto=convertBook(book);
-
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("Book Retrieved SuccessFully");
-        responseDTO.setData(List.of(dto));
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .data(List.of(dto))
+                .message("Book Retrieved SuccessFully").build();
     }
 
     public JsonResponseDTO bookNotSaved()
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(false);
-        responseDTO.setMessage("Book not saved!!");
-        responseDTO.setData(null);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(false)
+                .data(null)
+                .message("Book not saved!!").build();
     }
 
     public BookResponseDTO convertBook(Book book)
     {
-        BookResponseDTO bookResponseDTO=new BookResponseDTO();
-        bookResponseDTO.setId(book.getBookId());
-        bookResponseDTO.setName(book.getBookName());
-        bookResponseDTO.setAuthor(book.getAuthor());
-        bookResponseDTO.setDescription(book.getDescription());
-        bookResponseDTO.setPrice(book.getPrice());
-        bookResponseDTO.setQuantity(book.getQuantity());
-        bookResponseDTO.setBookLogo(book.getBookLogo());
-        return bookResponseDTO;
+        return BookResponseDTO.builder()
+                .id(book.getBookId())
+                .name(book.getBookName())
+                .author(book.getAuthor())
+                .description(book.getDescription())
+                .price(book.getPrice())
+                .quantity(book.getQuantity())
+                .bookLogo(book.getBookLogo()).build();
     }
 
     public JsonResponseDTO sendBookList(List<Book> books)
     {
-        JsonResponseDTO responseDTO=new JsonResponseDTO();
-        responseDTO.setResult(true);
-        responseDTO.setMessage("Books retrieved Successfully");
-        responseDTO.setData(books);
-        return responseDTO;
+        return JsonResponseDTO.builder()
+                .result(true)
+                .message("Books retrieved Successfully")
+                .data(books).build();
     }
 
 }

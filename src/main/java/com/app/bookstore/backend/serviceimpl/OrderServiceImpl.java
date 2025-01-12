@@ -63,7 +63,6 @@ public class OrderServiceImpl implements OrderService
     @Override
     public JsonResponseDTO cancelOrder(String email, Long orderId)
     {
-        //User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
         Order order=orderRepository.findById(orderId).orElseThrow(()->new OrderNotFoundException("Order Not Found"));
 
         if(order.getCancelOrder()){
@@ -75,7 +74,6 @@ public class OrderServiceImpl implements OrderService
             Book book=bookRepository.findById(cart.getBook().getBookId()).orElseThrow(()->new BookNotFoundException("Book Not Found"));
             book.setQuantity(book.getQuantity()+ cart.getQuantity());
             book.setCartBookQuantity(book.getCartBookQuantity()- cart.getQuantity());
-            //order.getCarts().remove(cart);
             cartRepository.save(cart);
         }
         order.setCancelOrder(true);
