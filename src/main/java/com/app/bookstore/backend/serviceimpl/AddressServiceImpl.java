@@ -1,6 +1,6 @@
 package com.app.bookstore.backend.serviceimpl;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.exception.AddressNotFoundException;
 import com.app.bookstore.backend.exception.UserNotFoundException;
 import com.app.bookstore.backend.mapper.AddressMapper;
@@ -8,8 +8,13 @@ import com.app.bookstore.backend.model.Address;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.repository.AddressRepository;
 import com.app.bookstore.backend.repository.UserRepository;
+import com.app.bookstore.backend.requestdto.AddressRequestDTO;
+import com.app.bookstore.backend.responsedto.AddressResponseDTO;
 import com.app.bookstore.backend.service.AddressService;
+import com.app.bookstore.backend.util.ResponseStructure;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,21 +26,34 @@ public class AddressServiceImpl implements AddressService
 {
     private UserRepository userRepository;
     private AddressRepository addressRepository;
-
     private final AddressMapper addressMapper=new AddressMapper();
 
     @Override
-    public JsonResponseDTO addAddress(String email,Address address)
+    public ResponseEntity<ResponseStructure<AddressResponseDTO>> addAddress(String email, AddressRequestDTO addressRequestDTO)
     {
-        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not Found"));
-        Address newAddress=addressMapper.addAddress(user.getUserId(),address);
+        if (email==null || email.isEmpty())
+        {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+
+        if (addressRequestDTO==null)
+        {
+            throw new IllegalArgumentException("Address request cannot be null");
+        }
+
+        User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not Found with email "+email));
+        Address newAddress=addressMapper.addAddress(user.getUserId(),addressRequestDTO);
 
         if(user.getAddresses()==null)
             user.setAddresses(new ArrayList<>());
         user.getAddresses().add(newAddress);
 
         Address savedAddress=addressRepository.save(newAddress);
-        return addressMapper.saveAddress(savedAddress);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseStructure<AddressResponseDTO>()
+                .setStatus(HttpStatus.CREATED.value())
+                .setMessage("Address created successfully")
+                .setData(addressMapper.mapAddressToAddressDTO(savedAddress)));
     }
 
     @Override

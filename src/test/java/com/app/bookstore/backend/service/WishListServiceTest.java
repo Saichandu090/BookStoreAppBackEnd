@@ -1,7 +1,7 @@
 package com.app.bookstore.backend.service;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.WishListDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.WishListDTO;
 import com.app.bookstore.backend.mapper.WishListMapper;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.User;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -96,7 +95,6 @@ class WishListServiceTest
         when(wishListRepository.save(Mockito.any(WishList.class))).thenReturn(wishList);
 
         JsonResponseDTO responseDTO=wishListService.addToWishList(user.getEmail(),wishListDTO);
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
     }
@@ -109,7 +107,6 @@ class WishListServiceTest
         when(wishListRepository.saveAll(Mockito.any())).thenReturn(List.of(wishList));
 
         JsonResponseDTO responseDTO=wishListService.removeFromWishList(user.getEmail(),book.getBookId());
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
     }
@@ -120,7 +117,6 @@ class WishListServiceTest
         when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(user));
 
         JsonResponseDTO responseDTO=wishListService.getAllWishListItems(user.getEmail());
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
         Assertions.assertThat(responseDTO.getData().size()).isEqualTo(1);
@@ -133,7 +129,6 @@ class WishListServiceTest
         when(bookRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(book));
 
         JsonResponseDTO responseDTO=wishListService.isInWishList(user.getEmail(),book.getBookId());
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
     }

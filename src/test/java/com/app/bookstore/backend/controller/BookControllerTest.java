@@ -1,8 +1,8 @@
 package com.app.bookstore.backend.controller;
 
-import com.app.bookstore.backend.DTO.BookRequestDTO;
-import com.app.bookstore.backend.DTO.BookResponseDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.BookRequestDTO;
+import com.app.bookstore.backend.dto.BookResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.User;
@@ -33,7 +33,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 

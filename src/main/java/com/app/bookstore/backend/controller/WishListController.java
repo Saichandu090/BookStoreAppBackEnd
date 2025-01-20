@@ -1,9 +1,8 @@
 package com.app.bookstore.backend.controller;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.WishListDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.WishListDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
-import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.service.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

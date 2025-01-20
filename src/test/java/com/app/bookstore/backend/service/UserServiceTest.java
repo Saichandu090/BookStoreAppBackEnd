@@ -1,8 +1,8 @@
 package com.app.bookstore.backend.service;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.UserLoginDTO;
-import com.app.bookstore.backend.DTO.UserRegisterDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.UserLoginDTO;
+import com.app.bookstore.backend.dto.UserRegisterDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.repository.UserRepository;
@@ -109,7 +109,6 @@ class UserServiceTest
 
         JsonResponseDTO responseDTO=userService.registerUser(userRegisterDTO);
 
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isEqualTo(true);
     }
@@ -132,7 +131,6 @@ class UserServiceTest
 
         JsonResponseDTO responseDTO=userService.login(loginDTO);
 
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isEqualTo(true);
     }

@@ -1,6 +1,5 @@
-package com.app.bookstore.backend.DTO;
+package com.app.bookstore.backend.dto;
 
-import com.app.bookstore.backend.model.Book;
 import lombok.*;
 
 @Builder

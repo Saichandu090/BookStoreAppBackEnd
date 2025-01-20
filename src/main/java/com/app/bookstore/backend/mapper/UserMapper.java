@@ -1,15 +1,14 @@
 package com.app.bookstore.backend.mapper;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.LoginResponseDTO;
-import com.app.bookstore.backend.DTO.UserEditDTO;
-import com.app.bookstore.backend.DTO.UserRegisterDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.LoginResponseDTO;
+import com.app.bookstore.backend.dto.UserEditDTO;
+import com.app.bookstore.backend.dto.UserRegisterDTO;
 import com.app.bookstore.backend.model.User;
 import com.app.bookstore.backend.serviceimpl.JWTService;
 import com.app.bookstore.backend.serviceimpl.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 

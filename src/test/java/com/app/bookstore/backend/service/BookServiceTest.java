@@ -1,7 +1,7 @@
 package com.app.bookstore.backend.service;
 
-import com.app.bookstore.backend.DTO.BookRequestDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.BookRequestDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.BookMapper;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.repository.BookRepository;
@@ -131,7 +131,6 @@ class BookServiceTest
         when(bookRepository.save(Mockito.any(Book.class))).thenReturn(book);
 
         JsonResponseDTO responseDTO=bookService.updateBook(book.getBookId(),bookRequestDTO);
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isEqualTo(true);
     }

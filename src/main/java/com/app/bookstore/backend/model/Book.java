@@ -20,6 +20,6 @@ public class Book
     private String description;
     private Double price;
     private String bookLogo;
-    private Integer quantity; // It should get reflected by cart
-    private Integer cartBookQuantity; // It should set by cart
+    private Integer quantity;
+    private Integer cartBookQuantity;
 }

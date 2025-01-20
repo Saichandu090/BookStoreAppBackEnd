@@ -23,32 +23,38 @@ public class UserPrinciple implements UserDetails
     }
 
     @Override
-    public String getPassword() {
+    public String getPassword()
+    {
         return user.getPassword();
     }
 
     @Override
-    public String getUsername() {
+    public String getUsername()
+    {
         return user.getEmail();
     }
 
     @Override
-    public boolean isAccountNonExpired() {
+    public boolean isAccountNonExpired()
+    {
         return UserDetails.super.isAccountNonExpired();
     }
 
     @Override
-    public boolean isAccountNonLocked() {
+    public boolean isAccountNonLocked()
+    {
         return UserDetails.super.isAccountNonLocked();
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
+    public boolean isCredentialsNonExpired()
+    {
         return UserDetails.super.isCredentialsNonExpired();
     }
 
     @Override
-    public boolean isEnabled() {
+    public boolean isEnabled()
+    {
         return UserDetails.super.isEnabled();
     }
 }

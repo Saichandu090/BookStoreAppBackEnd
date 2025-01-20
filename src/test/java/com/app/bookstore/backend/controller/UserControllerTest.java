@@ -1,9 +1,9 @@
 package com.app.bookstore.backend.controller;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.UserEditDTO;
-import com.app.bookstore.backend.DTO.UserLoginDTO;
-import com.app.bookstore.backend.DTO.UserRegisterDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.UserEditDTO;
+import com.app.bookstore.backend.dto.UserLoginDTO;
+import com.app.bookstore.backend.dto.UserRegisterDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.service.UserService;
 import com.app.bookstore.backend.serviceimpl.JWTService;
@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 

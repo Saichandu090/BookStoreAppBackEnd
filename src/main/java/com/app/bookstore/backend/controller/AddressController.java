@@ -1,9 +1,12 @@
 package com.app.bookstore.backend.controller;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Address;
+import com.app.bookstore.backend.requestdto.AddressRequestDTO;
+import com.app.bookstore.backend.responsedto.AddressResponseDTO;
 import com.app.bookstore.backend.service.AddressService;
+import com.app.bookstore.backend.util.ResponseStructure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +25,15 @@ public class AddressController
     private AddressService addressService;
 
     @PostMapping("/addAddress")
-    public ResponseEntity<JsonResponseDTO> addAddress(@RequestHeader("Authorization")String authHeader, @RequestBody Address address)
+    public ResponseEntity<ResponseStructure<AddressResponseDTO>> addAddress(@RequestHeader("Authorization")String authHeader, @RequestBody AddressRequestDTO addressRequestDTO)
     {
         UserDetails userDetails=userMapper.validateUserToken(authHeader);
         if(userDetails!=null)
         {
-            return new ResponseEntity<>(addressService.addAddress(userDetails.getUsername(),address), HttpStatus.ACCEPTED);
+            return addressService.addAddress(userDetails.getUsername(),addressRequestDTO);
         }
         else
-            return new ResponseEntity<>(userMapper.noAuthority(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseStructure<>(HttpStatus.BAD_REQUEST.value(),"No Authority",null),HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/editAddress/{addressId}")

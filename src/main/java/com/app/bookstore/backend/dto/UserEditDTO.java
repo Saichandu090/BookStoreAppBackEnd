@@ -1,6 +1,5 @@
-package com.app.bookstore.backend.DTO;
+package com.app.bookstore.backend.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;

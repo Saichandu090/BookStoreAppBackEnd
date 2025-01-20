@@ -1,7 +1,7 @@
 package com.app.bookstore.backend.controller;
 
-import com.app.bookstore.backend.DTO.CartRequestDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.CartRequestDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;

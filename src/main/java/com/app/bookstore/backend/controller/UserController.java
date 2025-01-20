@@ -1,9 +1,9 @@
 package com.app.bookstore.backend.controller;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.UserEditDTO;
-import com.app.bookstore.backend.DTO.UserLoginDTO;
-import com.app.bookstore.backend.DTO.UserRegisterDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.UserEditDTO;
+import com.app.bookstore.backend.dto.UserLoginDTO;
+import com.app.bookstore.backend.dto.UserRegisterDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 

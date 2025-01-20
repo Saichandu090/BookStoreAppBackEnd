@@ -1,11 +1,9 @@
 package com.app.bookstore.backend.controller;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.OrderDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.OrderDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
-import com.app.bookstore.backend.model.Address;
 import com.app.bookstore.backend.service.OrderService;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

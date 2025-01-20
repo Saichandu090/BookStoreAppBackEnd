@@ -1,7 +1,7 @@
 package com.app.bookstore.backend.service;
 
-import com.app.bookstore.backend.DTO.CartRequestDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.CartRequestDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.CartMapper;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.Cart;
@@ -19,12 +19,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -98,9 +96,9 @@ class CartServiceTest
         when(cartRepository.save(Mockito.any(Cart.class))).thenReturn(cart);
 
         JsonResponseDTO responseDTO=cartService.addToCart(user.getEmail(),cartRequestDTO);
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
+        Assertions.assertThat(responseDTO.getData().getFirst()).isEqualTo(cart);
     }
 
     @Test
@@ -111,7 +109,6 @@ class CartServiceTest
         when(cartRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(cart));
 
         JsonResponseDTO responseDTO=cartService.removeFromCart(user.getEmail(),cart.getCartId());
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
     }
@@ -146,7 +143,6 @@ class CartServiceTest
         when(cartRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(cart));
 
         JsonResponseDTO responseDTO=cartService.getUserCartById(user.getEmail(),cart.getCartId());
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
     }

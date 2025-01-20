@@ -1,14 +1,10 @@
 package com.app.bookstore.backend.mapper;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.OrderDTO;
-import com.app.bookstore.backend.model.Address;
-import com.app.bookstore.backend.model.Book;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.OrderDTO;
 import com.app.bookstore.backend.model.Order;
-import com.app.bookstore.backend.model.User;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderMapper

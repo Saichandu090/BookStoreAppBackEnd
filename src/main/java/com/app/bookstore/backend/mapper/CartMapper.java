@@ -1,11 +1,8 @@
 package com.app.bookstore.backend.mapper;
 
-import com.app.bookstore.backend.DTO.CartResponseDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.model.Book;
+import com.app.bookstore.backend.dto.CartResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.model.Cart;
-import com.app.bookstore.backend.model.User;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,13 +1,15 @@
 package com.app.bookstore.backend.mapper;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.model.Address;
+import com.app.bookstore.backend.requestdto.AddressRequestDTO;
+import com.app.bookstore.backend.responsedto.AddressResponseDTO;
 
 import java.util.List;
 
 public class AddressMapper
 {
-    public Address addAddress(Long userId,Address address)
+    public Address addAddress(Long userId, AddressRequestDTO address)
     {
         return Address.builder()
                 .streetName(address.getStreetName())
@@ -57,5 +59,15 @@ public class AddressMapper
                 .data(null)
                 .result(false)
                 .message(message).build();
+    }
+
+    public AddressResponseDTO mapAddressToAddressDTO(Address savedAddress)
+    {
+        return AddressResponseDTO.builder()
+                .addressId(savedAddress.getAddressId())
+                .state(savedAddress.getState())
+                .city(savedAddress.getCity())
+                .pinCode(savedAddress.getPinCode())
+                .streetName(savedAddress.getStreetName()).build();
     }
 }

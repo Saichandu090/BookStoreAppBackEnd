@@ -1,6 +1,6 @@
 package com.app.bookstore.backend.controller;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.UserMapper;
 import com.app.bookstore.backend.model.Address;
 import com.app.bookstore.backend.model.User;
@@ -22,12 +22,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -73,7 +71,7 @@ class AddressControllerTest
     }
 
     @Test
-    public void AddressController_AddAddress_MustAddAddress() throws Exception
+    public void addressController_AddAddress_MustAddAddress() throws Exception
     {
         String token="Bearer Token";
         Address address=Address.builder()
@@ -86,9 +84,9 @@ class AddressControllerTest
 
         JsonResponseDTO responseDTO=new JsonResponseDTO(true,"Address added successfully",null);
 
-        given(addressService.addAddress(ArgumentMatchers.any(),ArgumentMatchers.any())).willReturn(responseDTO);
-        given(jwtService.validateToken(ArgumentMatchers.any(),ArgumentMatchers.any())).willReturn(true);
-        given(userMapper.validateUserToken(ArgumentMatchers.any())).willReturn(userDetails);
+//        given(addressService.addAddress(ArgumentMatchers.any(),ArgumentMatchers.any())).willReturn(responseDTO);
+//        given(jwtService.validateToken(ArgumentMatchers.any(),ArgumentMatchers.any())).willReturn(true);
+//        given(userMapper.validateUserToken(ArgumentMatchers.any())).willReturn(userDetails);
 
         mockMvc.perform(post("/address/addAddress")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -102,7 +100,7 @@ class AddressControllerTest
     }
 
     @Test
-    public void AddressController_EditAddress_MustEditAddress() throws Exception
+    public void addressController_EditAddress_MustEditAddress() throws Exception
     {
         String token="Bearer Token";
         Address address=Address.builder()

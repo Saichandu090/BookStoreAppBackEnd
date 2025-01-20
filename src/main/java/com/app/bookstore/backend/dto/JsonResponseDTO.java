@@ -1,4 +1,4 @@
-package com.app.bookstore.backend.DTO;
+package com.app.bookstore.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

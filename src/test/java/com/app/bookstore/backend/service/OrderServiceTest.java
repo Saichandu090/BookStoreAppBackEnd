@@ -1,7 +1,7 @@
 package com.app.bookstore.backend.service;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.OrderDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.OrderDTO;
 import com.app.bookstore.backend.mapper.OrderMapper;
 import com.app.bookstore.backend.model.*;
 import com.app.bookstore.backend.repository.*;
@@ -14,14 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.json.JsonbTester;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -126,7 +124,6 @@ class OrderServiceTest
         when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order);
 
         JsonResponseDTO responseDTO=orderService.placeOrder(user.getEmail(),orderDTO);
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
     }
@@ -140,7 +137,6 @@ class OrderServiceTest
         when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order);
 
         JsonResponseDTO responseDTO=orderService.cancelOrder(user.getEmail(),order.getOrderId());
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
     }
@@ -151,7 +147,6 @@ class OrderServiceTest
         when(orderRepository.findAll()).thenReturn(List.of(order));
 
         JsonResponseDTO responseDTO=orderService.getAllOrders();
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
         Assertions.assertThat(responseDTO.getData().size()).isEqualTo(1);
@@ -164,7 +159,6 @@ class OrderServiceTest
         when(orderRepository.findByUserId(Mockito.anyLong())).thenReturn(List.of(order));
 
         JsonResponseDTO responseDTO=orderService.getAllOrdersForUser(user.getEmail());
-        System.out.println(responseDTO);
         Assertions.assertThat(responseDTO).isNotNull();
         Assertions.assertThat(responseDTO.isResult()).isTrue();
         Assertions.assertThat(responseDTO.getData().size()).isEqualTo(1);

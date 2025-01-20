@@ -1,12 +1,9 @@
 package com.app.bookstore.backend.mapper;
 
-import com.app.bookstore.backend.DTO.BookRequestDTO;
-import com.app.bookstore.backend.DTO.BookResponseDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.BookRequestDTO;
+import com.app.bookstore.backend.dto.BookResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.model.Book;
-import com.app.bookstore.backend.model.User;
-import com.app.bookstore.backend.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
