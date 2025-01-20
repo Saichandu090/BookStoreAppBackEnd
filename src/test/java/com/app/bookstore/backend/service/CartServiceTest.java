@@ -1,7 +1,7 @@
 package com.app.bookstore.backend.service;
 
-import com.app.bookstore.backend.DTO.CartRequestDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.CartRequestDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.mapper.CartMapper;
 import com.app.bookstore.backend.model.Book;
 import com.app.bookstore.backend.model.Cart;

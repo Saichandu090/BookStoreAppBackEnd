@@ -1,13 +1,9 @@
-package com.app.bookstore.backend.DTO;
+package com.app.bookstore.backend.dto;
 
-import com.app.bookstore.backend.model.Book;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Set;
 
 @Builder
 @Data

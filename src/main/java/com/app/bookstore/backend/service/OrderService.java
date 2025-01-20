@@ -1,8 +1,7 @@
 package com.app.bookstore.backend.service;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.OrderDTO;
-import com.app.bookstore.backend.model.Address;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.OrderDTO;
 
 public interface OrderService
 {

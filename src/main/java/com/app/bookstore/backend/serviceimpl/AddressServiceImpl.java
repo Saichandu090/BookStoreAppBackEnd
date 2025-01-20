@@ -1,6 +1,6 @@
 package com.app.bookstore.backend.serviceimpl;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.exception.AddressNotFoundException;
 import com.app.bookstore.backend.exception.UserNotFoundException;
 import com.app.bookstore.backend.mapper.AddressMapper;

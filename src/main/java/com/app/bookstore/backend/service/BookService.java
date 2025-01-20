@@ -1,9 +1,7 @@
 package com.app.bookstore.backend.service;
 
-import com.app.bookstore.backend.DTO.BookRequestDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-
-import java.util.Map;
+import com.app.bookstore.backend.dto.BookRequestDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 
 public interface BookService
 {

@@ -1,4 +1,4 @@
-package com.app.bookstore.backend.DTO;
+package com.app.bookstore.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDTO
+public class CartRequestDTO
 {
-    private String email;
-    private String password;
+    private Long bookId;
+    private int quantity;
 }

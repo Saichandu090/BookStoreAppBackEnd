@@ -1,7 +1,7 @@
 package com.app.bookstore.backend.serviceimpl;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
-import com.app.bookstore.backend.DTO.OrderDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
+import com.app.bookstore.backend.dto.OrderDTO;
 import com.app.bookstore.backend.exception.*;
 import com.app.bookstore.backend.mapper.OrderMapper;
 import com.app.bookstore.backend.model.*;

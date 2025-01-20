@@ -1,6 +1,6 @@
 package com.app.bookstore.backend.mapper;
 
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 
 public class ExceptionMapper
 {

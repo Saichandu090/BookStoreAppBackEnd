@@ -1,7 +1,7 @@
 package com.app.bookstore.backend.serviceimpl;
 
-import com.app.bookstore.backend.DTO.CartRequestDTO;
-import com.app.bookstore.backend.DTO.JsonResponseDTO;
+import com.app.bookstore.backend.dto.CartRequestDTO;
+import com.app.bookstore.backend.dto.JsonResponseDTO;
 import com.app.bookstore.backend.exception.BookNotFoundException;
 import com.app.bookstore.backend.exception.CartNotFoundException;
 import com.app.bookstore.backend.exception.UserNotFoundException;
